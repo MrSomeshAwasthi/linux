@@ -9,18 +9,19 @@
 #include<fcntl.h>
 int main()
 {
+	const char *ch="fileQ1_fifo.txt";
 	// creating a soft link
-	if (symlink("my_file.txt","sl")<0) //it create a softlink
+	if (symlink("fileQ1.txt","sl")<0) //it create a softlink
 	{
 		perror("error in creating a soft link\n");//this function will print specific error
 		return 1;
 	}
-	if (link("my_file.txt","hl")<0)	// it will create a hardlink
+	if (link("fileQ1.txt","hl")<0)	// it will create a hardlink
 	{
 		perror("error in creating a hard link\n");
 		return 1;
 	}
-	if (mknod("my_file1.txt",S_IFIFO,0)<0)
+	if (mkfifo(ch,0666)<0)
 	{
 		perror("error in creating a Fifo\n");
 		return 1;
