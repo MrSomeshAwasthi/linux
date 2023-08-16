@@ -1,3 +1,7 @@
+#Challenge: Illustrating Advanced Shell Scripting
+#Design an interactive shell script that serves as an Employee Record Management System. This system should encompass key employee details: their Name, Employee Number, and Telephone Number.
+#The script's capabilities should encompass the ability to seamlessly create records, delete records, effortlessly retrieve and showcase specific employee details, efficiently sort the records, and comprehensively present the entire employee record collection.
+
 #!/bin/bash
 emp_struct(){
 name=""
@@ -21,30 +25,27 @@ new_rec(){
 	read eid
 	echo "enter mob no.: "
 	read phone
-	echo "$name | $eid | $phone">>data
+	echo "$name|$eid|$phone">>data
 }
 del_rec(){
 	echo "enter eid to delete: "
 	read a
-	#grep -v "^.*:$num:.*$" data > temp
-	#mv temp data
-	sed -i "/$a/d" data
+	grep -v  "|$a|" data > temp
+	mv temp data
 }
 search(){
 	echo "enter eid to search"
 	read a
-	if grep -q "$a" data;  then
-		cat data | sed -n "/$a/p"
-	else
-		echo "record not found"
-	fi	
+	grep "|$a|" data || echo "no record found "	
 }
 sorted(){
-	sort -t ':' -k2n data > temp
+	sort -t '|' -k 1 data > temp
 	mv temp data
 	cat data
 }
 display_all(){
+	echo " "
+	echo "Displaying all data ..."
 	cat data
 }
 while true;
