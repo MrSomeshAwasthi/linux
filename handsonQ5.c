@@ -2,28 +2,10 @@
 #include<stdio.h>
 #include<unistd.h>
 #include<stdlib.h>
+#include<fcntl.h>
+
 int main()
 {
-    FILE *fileQ[5];
-    for(int i=0;i<5;i++)
-    {
-        char filename[20];
-        sprintf(filename,"fileQ%d",i);
-        fileQ[i]=fopen(filename,"w");
-        if(fileQ[i]==NULL)
-        {
-            perror("Failed to create a file");
-            exit(1);
-        }
-    }
-        while(1)
-        {   
-            //fprintf(fileQ[i],"This is the file");
-            sleep(15);
-        }
-    for(int i=0;i<5;i++)
-    {
-        fclose(fileQ[i]);
-    }
+    int file_descriptor=open('fileQ51',O_RDWR|O_CREAT|O_EXCL);
     return 0;
 }
