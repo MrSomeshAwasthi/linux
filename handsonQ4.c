@@ -9,13 +9,13 @@ int main()
 {
 const char *filename="fileQ4.txt";
 const char *data="Now Im writing through CLI";
-int file_discriptor=open(filename,O_WRONLY | O_EXCL, 0666);
-write(file_discriptor,data,strlen(data));
-if(file_discriptor<0)
+int file_descriptor=open(filename,O_WRONLY | O_EXCL, 0666);
+write(file_descriptor,data,strlen(data));
+if(file_descriptor<0)
 {
     perror("error in opening file");
     return 1;
 }
-close(file_discriptor);
+close(file_descriptor);
 return 0;
 }

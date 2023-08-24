@@ -6,20 +6,20 @@
 int main()
 {
     int a;
-    int file_discriptor=open("fileQ8",O_RDONLY);
+    int file_descriptor=open("fileQ8",O_RDONLY);
     char buffer[1024];
-    if (file_discriptor<0)
+    if (file_descriptor<0)
     {
         perror("file is empty");
         return 1;
     }
     //ssize_t read(int fd, void buf[.count], size_t count);
-    while ((a=read(file_discriptor,buffer,1024))>0)
+    while ((a=read(file_descriptor,buffer,1024))>0)
     {   
         if (buffer[a-1]=='\n')
             buffer[a-1]='\0';
         printf("%s\n",buffer);
     }
-    int fd_close=close(file_discriptor);
+    int fd_close=close(file_descriptor);
     return 0;
 }
