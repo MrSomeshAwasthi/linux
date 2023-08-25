@@ -1,3 +1,9 @@
+/*
+1. Create the following types of a files using (i) shell command (ii) system call
+ a. soft link (symlink system call)
+ b. hard link (link system call)
+ c. FIFO (mkfifo Library Function or mknod system call)
+*/
 // including important header file like stdio for i/o and 
 // stdlib for memory management (sys/types,sys/stat,fcntl) for file and directory management
 // and for system call unistd

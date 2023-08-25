@@ -39,7 +39,7 @@ int main()
         }
         write(file_descriptor,&buf,sizeof(buf));
         write(dup_fd,&buf,sizeof(buf));
-    // duplicate the file_descriptor in dup3_fd
+    // duplicate the file_descriptor in dup3_fd (fcntl)
         write(file_descriptor,"duplicate using fcntl\n",sizeof("duplicate using fcntl\n"));
         dup3_fd=fcntl(file_descriptor,F_DUPFD,0);
         if (dup3_fd<0)
