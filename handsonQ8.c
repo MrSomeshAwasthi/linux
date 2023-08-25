@@ -18,7 +18,7 @@ int main()
     {   
         if (buffer[a-1]=='\n')
             buffer[a-1]='\0';
-        printf("%s\n",buffer);
+        write(1,buffer,1024);
     }
     int fd_close=close(file_descriptor);
     return 0;
