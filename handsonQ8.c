@@ -7,18 +7,19 @@ int main()
 {
     int a;
     int file_descriptor=open("fileQ8",O_RDONLY);
-    char buffer[1024];
+    char buffer[1];
     if (file_descriptor<0)
     {
         perror("file is empty");
         return 1;
     }
     //ssize_t read(int fd, void buf[.count], size_t count);
-    while ((a=read(file_descriptor,buffer,1024))>0)
+    while ((a=read(file_descriptor,buffer,1))>0)
     {   
-        if (buffer[a-1]=='\n')
-            buffer[a-1]='\0';
-        write(1,buffer,1024);
+        if (buffer[0]=='\n')
+            write(1,"\n\n",1);
+        else
+            write(1,buffer,1);
     }
     int fd_close=close(file_descriptor);
     return 0;
