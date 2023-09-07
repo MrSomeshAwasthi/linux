@@ -6,25 +6,22 @@ parent processes. Check output of the file.
 #include<stdlib.h>
 #include<fcntl.h>
 #include<unistd.h>
-int main()
+int main(int argc,char* argv[])
 {
-    char buff[100];
+    //char buff[20];
     int file_descriptor=open("fileQ22",O_RDWR|O_CREAT,0666);
     int pid=fork();
     if(pid==0)
     {
         printf("in child process\n");
-        printf("enter thing to write in child process\n");
-        read(1,buff,sizeof(buff));
-        write(file_descriptor,buff,sizeof(buff));
+        write(file_descriptor,"hello from child process\n",26);
         printf("\nend child.\n");
     }
     else
     {
+        sleep(2);
         printf("in parent process\n");
-        printf("enter thing to write in parent process\n");
-        read(1,buff,sizeof(buff));
-        write(file_descriptor,buff,sizeof(buff));
+        write(file_descriptor,"hello from parent process\n",27);
         printf("\nend parent.\n");
     }
     return 0;
