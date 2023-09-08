@@ -10,6 +10,6 @@ int main()
     if (!fork())
         printf("child pid: %d\n",getpid());
     else
-        printf("parent pid: %d\n",getppid());
+        printf("parent pid: %d\n",getpid());
     return 0;
 }
