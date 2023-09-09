@@ -10,13 +10,14 @@ Date: 28th Aug, 2023.
 #include<fcntl.h>
 int main()
 {
-    int file_descriptor=open("file",O_RDONLY);
+    int file_descriptor=open("file",O_RDWR);
     if(file_descriptor<0)
     {
         perror("error in opening file\n");
         return 0;
     }
     int flag = fcntl(file_descriptor, F_GETFL);
+    printf("%d\n",flag);
     if ((flag & O_ACCMODE) == O_RDONLY)
         printf("file is in read only mode\n");
     else if ((flag & O_ACCMODE) == O_RDWR)

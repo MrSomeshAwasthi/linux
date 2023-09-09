@@ -14,22 +14,23 @@ Date: 28th Aug, 2023.
 #include<unistd.h>
 int main()
 {
-    int file_descriptor=open("file",O_RDWR|O_CREAT,0666);
+    int file_descriptor=open("file",O_RDWR),num;
+    char ticket_num;
     struct flock l;
-    l.l_type=O_WRONLY;
+    l.l_type=F_WRLCK;
     l.l_whence=SEEK_SET;
     l.l_start=0;
     l.l_len=0;
     l.l_pid=getpid();
     fcntl(file_descriptor,F_SETLKW,&l);
-    int ticket_num;
-    //fscanf(fdopen(file_descriptor,"r"),"%d",&ticket_num);
-    read(file_descriptor,&ticket_num,sizeof(int));
-    int new=ticket_num+1;
+    printf("lock attained\n");
+    read(file_descriptor,&ticket_num,sizeof(char));
+    num = (int)ticket_num+1;
+    ticket_num=(char)num;
     lseek(file_descriptor,0,SEEK_SET);
-    write(file_descriptor,&new,sizeof(int));
-    printf("ticket number: %d\n",new);
-    printf("status updated successfully.\n");
+    write(file_descriptor,&ticket_num,sizeof(char));
+    printf("ticket number: %c\nstatus updated successfully.\n",ticket_num);
+    getchar();
     l.l_type = F_UNLCK;  
     fcntl(file_descriptor, F_SETLK, &l);
     close(file_descriptor);

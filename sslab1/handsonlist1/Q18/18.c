@@ -46,7 +46,7 @@ void rellock(int file_descriptor, off_t offset) {
 }
 int main()
 {
-    int file_descriptor=open("file",O_RDWR|O_CREAT,0666);
+    int file_descriptor=open("fileQ18",O_RDWR|O_CREAT,0666);
     struct Record a[3];
     int choice,rd;
     char buffer[RECORD_SIZE];

@@ -1,18 +1,17 @@
 /*
-====================================================================================
+==========================================================================================
 Name : 11.c
 Author : Somesh Awasthi
-Description :Write a program to open a file, duplicate the file descriptor and append the file with both the
-descriptors and check whether the file is updated properly or not.
+Description :Write a program to open a file, duplicate the file descriptor and append
+the file with both the descriptors and check whether the file is updated properly or not.
  a. use dup
  b. use dup2
  c. use fcntl
 Date: 28th Aug, 2023.
-====================================================================================
+===========================================================================================
 */
 #include<stdio.h>
 #include<fcntl.h>
-#include<stdlib.h>
 #include<unistd.h>
 int main()
 {
@@ -46,7 +45,7 @@ int main()
         write(dup_fd,&buf,sizeof(buf));
     // duplicate the file_descriptor in dup3_fd (fcntl)
         write(file_descriptor,"duplicate using fcntl\n",sizeof("duplicate using fcntl\n"));
-        dup3_fd=fcntl(file_descriptor,F_DUPFD,0);
+        dup3_fd=fcntl(file_descriptor,F_DUPFD);
         if (dup3_fd<0)
         {
             perror("3. error in duplicating fd\n");

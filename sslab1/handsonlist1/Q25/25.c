@@ -8,32 +8,30 @@ Date: 28th Aug, 2023.
 ====================================================================================
 */
 #include<stdio.h>
-#include<stdlib.h>
+#include<sys/wait.h>
 #include<unistd.h> 
-#include <sys/wait.h>
 int main()
 {
-    int pids[3];
-    int status,child1,child2,child3;
-    child1=fork();
-    if(child1>0)
+    int arr[3];
+    int status,a,b,c;
+    a=fork();
+    if(a>0)
     {
-        printf("child 1 created: %d\n",child1);
-        pids[0]=child1;
-        child2=fork();
-        if (child2>0)
+        printf("child 1 created: %d\n",a);
+        arr[0]=a;
+        b=fork();
+        if (b>0)
         {
-            printf("child 2 created: %d\n",child2);
-            pids[1]=child2;
-            child3=fork();
-            if (child3>0)
+            printf("child 2 created: %d\n",b);
+            arr[1]=b;
+            c=fork();
+            if (c>0)
             {
-                printf("child 3 created: %d\n",child3);
-                pids[2]=child3;
-                int a=waitpid(pids[2],&status,WUNTRACED);
-                //printf("")
-            }
-            
+                printf("child 3 created: %d\n",c);
+                arr[2]=c;
+                int a=waitpid(arr[2],&status,WUNTRACED);
+                printf("terminating Child process with process %d\n",a);
+            }            
         }
     }
 }

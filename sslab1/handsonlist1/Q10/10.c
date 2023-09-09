@@ -10,28 +10,26 @@ Date: 28th Aug, 2023.
 ====================================================================================
 */
 #include<stdio.h>   
-#include<stdlib.h>
 #include<unistd.h>
 #include<string.h>
 #include<fcntl.h>
 int main()
 {
-    int fd_read;
-    fd_read=open("file",O_RDWR|O_CREAT,0666);
-    if (fd_read<0)
+    int file_descriptor = open("file",O_RDWR|O_CREAT,0666);
+    if (file_descriptor<0)
     {
         perror("error in opening a file");
         return 0;
     }
-    int return_write = write(fd_read,"space of 10 bytes ",sizeof("space of 10 bytes "));
-    if (return_write<0)
+    int bytes_write = write(file_descriptor,"space of 10 bytes ",sizeof("space of 10 bytes "));
+    if (bytes_write<0)
     {
         perror("write error");
         return 0;
     }
-    off_t return_lseek = lseek(fd_read,10,SEEK_CUR);
-    return_write=write(fd_read,"second time typing 10 bytes",sizeof("second time typing 10 bytes"));
-    if (return_write<0)
+    off_t return_lseek = lseek(file_descriptor,10,SEEK_CUR);
+    bytes_write=write(file_descriptor,"second time typing 10 bytes",sizeof("second time typing 10 bytes"));
+    if (bytes_write<0)
     {
         perror("write error");
         return 0;

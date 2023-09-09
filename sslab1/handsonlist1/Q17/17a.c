@@ -14,12 +14,12 @@ Date: 28th Aug, 2023.
 #include<unistd.h>
 int main()
 {
-    int file_descriptor=open("file",O_RDWR);
-    int ticket_num=1;
-    write(file_descriptor,&ticket_num,sizeof(int));
-    close(file_descriptor);
-    printf("your ticket number: %d\n",ticket_num);
+    int file_descriptor=open("file",O_RDWR|O_CREAT|O_EXCL,0666);
+    char ticket_num='1';
+    write(file_descriptor,&ticket_num,sizeof(char));
+    printf("your ticket number: %c\n",ticket_num);
     printf("ticket updated successfully \n");
+    close(file_descriptor);
     return 0;
 
 

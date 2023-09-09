@@ -11,3 +11,12 @@ Description :27. Write a program to execute ls -Rl by the following system calls
 Date: 28th Aug, 2023.
 ====================================================================================
 */
+#include <stdio.h>
+#include <unistd.h>
+int main()
+{
+    printf("c. using execle: \n");
+    char *envp[] = {NULL};
+    execle("/bin/ls", "ls","-Rl",(char *) NULL,envp);
+	return 0;
+}

@@ -18,24 +18,24 @@ int main(int argc, char* argv[]) {
                 printf("enter proper arguments\n");
                 return -1;
         }
-        int fd_read = open(argv[1], O_RDONLY);
-        int fd_write = open(argv[2], O_WRONLY|O_CREAT);
+        int source = open(argv[1], O_RDONLY);
+        int target = open(argv[2], O_WRONLY|O_CREAT);
 
-        if(fd_read==-1 || fd_write==-1)
+        if(source==-1 || target==-1)
                 printf("error in reading or writing in a file.\n");
 
         // Logic
         while(1){
                 char buf;
-                int read_byte = read(fd_read, &buf, 1);
+                int read_byte = read(source, &buf, 1);
 
                 if(read_byte==0)
                         break;
 
-                int write_bytes = write(fd_write, &buf, 1);
+                int write_bytes = write(target, &buf, 1);
         }
-        int close_fd_read = close(fd_read);
-        int close_fd_write = close(fd_write);
+        int close_fd_read = close(source);
+        int close_fd_write = close(target);
 
         if(close_fd_read==-1 || close_fd_write==-1)
                 printf("error in closing file\n");

@@ -17,8 +17,6 @@ Date: 28th Aug, 2023.
 ====================================================================================
 */
 #include<stdio.h>
-#include<stdlib.h>
-#include<unistd.h>
 #include<time.h>
 #include<sys/stat.h>
 
@@ -27,7 +25,7 @@ int main(int argc,char *argv[])
     struct stat file_status;
     if (argc!=2)
     {
-        printf("error");
+        perror("error in input");
         return -1;
     }   
     if (stat(argv[1], &file_status) < 0)

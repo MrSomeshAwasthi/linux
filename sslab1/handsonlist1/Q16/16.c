@@ -14,12 +14,12 @@ Date: 28th Aug, 2023.
 int main()
 {
     int file_descriptor = open("file",O_RDWR|O_CREAT,0666);
-    int lt;
+    int choice;
     struct flock l;
     printf("select lock type 1. write 2. read \n");
-    scanf("%d%*c",&lt);
+    scanf("%d%*c",&choice);
     fflush(stdin);
-    if (lt == 1)
+    if (choice == 1)
     {
         l.l_type=F_WRLCK;
         l.l_whence=SEEK_SET;
@@ -28,14 +28,19 @@ int main()
         l.l_pid= getpid();
         fcntl(file_descriptor,F_SETLKW,&l);
     }
-    else
+    else if(choice==2)
     {
         l.l_type=F_RDLCK;
         l.l_whence=SEEK_SET;
         l.l_start=0;
         l.l_len=0;
         l.l_pid=getpid();
-        fcntl(file_descriptor,F_SETLK,&l);
+        fcntl(file_descriptor,F_SETLKW,&l);
+    }
+    else
+    {
+        perror("invalid input\n");
+        return(0);
     }
     //critical section
     printf("you are in critical section\n");

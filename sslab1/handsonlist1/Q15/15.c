@@ -9,7 +9,6 @@ Date: 28th Aug, 2023.
 =====================================================================================
 */
 #include<stdio.h>
-#include<stdlib.h>
 #include<string.h>
 int main()
 {

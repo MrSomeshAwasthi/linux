@@ -9,9 +9,6 @@ Date: 28th Aug, 2023.
 ====================================================================================
 */
 #include <stdio.h>
-#include <stdlib.h> 
-#include <unistd.h> 
-#include <fcntl.h> 
 #include <sys/select.h> 
 int main() 
 { 
@@ -20,7 +17,7 @@ int main()
     int return_val = 0; 
     // Initialize the readfds set 
     FD_ZERO(&rd); 
-    FD_SET(0, &rd); 
+    FD_SET(0, &rd);     
     // Set the timeout 
     tv.tv_sec = 10;             
     tv.tv_usec = 0; 
@@ -32,10 +29,13 @@ int main()
     {
         perror("select");
         return 1; 
-    } 
+    }
     if (return_val)
+    {
+        getchar(); 
         printf("Data available within 10 seconds \n");
+    }
     else 
-        printf("Data available within 10 seconds\n"); 
+        printf("Data not available within 10 seconds\n"); 
     return 0; 
 }

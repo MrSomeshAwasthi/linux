@@ -15,7 +15,7 @@ Date: 28th Aug, 2023.
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {    
-        perror("error please give proper input");
+        perror("input error");
         return 0;
     }
 
