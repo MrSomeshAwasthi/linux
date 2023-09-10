@@ -7,48 +7,42 @@ Date: 28th Aug, 2023.
 ========================================================================================
 */
 #include<stdio.h>
-#include <sys/types.h>
-#include <unistd.h> 
-#include<sys/stat.h>
-#include<time.h>
-#include<string.h>
-#include<fcntl.h>
+#include<unistd.h>
+#include<sys/types.h>
 #include<stdlib.h>
+#include <time.h>
+#define hour 17
+#define min 11
 
-int main(int argc, char* argv[]) {
-	
-	if(argc == 1){
-		perror("input error");
-		return 0;
-	}
+#define PATH "/home/somesh/sslab/sslab1/handsonlist1/Q30/extra"
 
-	int dpid = fork();
-	printf("%d\n",dpid);
-	if(dpid==0){
-		setsid();
-		chdir("/");
-		umask(0);
-		int i=0;
-		while(1){
-			time_t now = time(NULL);
-	        	struct tm *tm_struct = localtime(&now);
-        		int hour = tm_struct->tm_hour;
-        		int min = tm_struct->tm_min;
-			int h = atoi(argv[1]);
-			int m=-1;
-			if(argc>2) m = atoi(argv[2]);
-			if(hour == h && m!=-1 && min==m){
-				printf("Hello, my friend\n");
-				break;
-			}
-			else if(m==-1 && hour==h){
-				printf("Hello, my friend\n");
-				break;
-			}
-		}
-	}
-	else{
-		exit(0);
-	}
-
+void script()
+{
+    if(fork())
+	{
+    	execl(PATH,PATH,(char*)NULL);
+    	perror("error");
+    }
+}
+int main()
+{
+	if(fork()>0)
+        exit(0);
+	if(setsid()<0) 
+	{
+        perror("setsid failed");
+        exit(1);
+    }
+    while(1)
+	{
+        time_t now;
+        struct tm *current;
+        time(&now);
+        current = localtime(&now);
+        if(current->tm_hour==hour && current->tm_min== min){
+            script();
+            sleep(24*3600);
+        }
+        sleep(1);
+    }
 }
