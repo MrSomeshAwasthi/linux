@@ -1,6 +1,6 @@
 /*
 ==================================================================================================
-Name : 15.c
+Name : 16.c
 Author : Somesh Awasthi
 Description :  Write a program to send and receive data from parent to child vice versa. Use two 
 way communication. 
