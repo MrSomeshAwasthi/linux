@@ -28,7 +28,7 @@ int main()
         perror("error in writing");
         return 0;   
     }
-    printf("21a (data read) %s",buff);
+    printf("21a (data read): %s",buff);
     printf("read success\nend 21a\n");
 return 0;
 }
