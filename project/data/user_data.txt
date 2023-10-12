@@ -1,0 +1,5 @@
+admin:admin
+faculty1:facultypass1
+faculty2:facultypass2
+student1:studentpass1
+student2:studentpass2
