@@ -11,53 +11,98 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include"authen.h"
+
+
+
+#include "authen.h"
+#include "admin_fun.h"
+#include "prof_fun.h"
+#include "stud_fun.h"
+
+
+
 
 void query(int client_socket,struct sockaddr_in client_address) 
 {   
-    char read_buf[1024];
+    char read_buf[1024],tmp[1024];
     int choice;
 
-    char buf[1024] = "\n..............Welcome Back To Academia :: Course Registration..............\n\nPlease select your login type\n\n1. Admin\n2. Faculty\n3. Student\n4. Exit\nEnter Login Type : \n";
-    
-    send(client_socket,buf,strlen(buf),0);
+    memset(tmp, 0, sizeof(tmp));
+    strcpy(tmp, "\n..............Welcome Back To Academia :: Course Registration..............\n\nPlease select your login type\n\n1. Admin\n2. Faculty\n3. Student\n4. Exit\nEnter Login Type : \n");
+    send(client_socket,tmp,strlen(tmp),0);
     memset(read_buf,0,1024);
     int bytes_received = recv(client_socket, read_buf, sizeof(read_buf), 0);
     choice=atoi(&read_buf[0]);
     if (choice < 1 || choice > 4)
     { 
-        send(client_socket,"invalid input\n",sizeof("invalid input\n"),0);
+        memset(tmp, 0, sizeof(tmp));
+        strcpy(tmp, "invalid input\n");
+        send(client_socket,tmp,sizeof(tmp),0);
         return;
     }
     else if(choice==4)
     {
+        memset(tmp, 0, sizeof(tmp));
+        strcpy(tmp, "invalid input\n");
         send(client_socket,"BYE\n",sizeof("BYE\n"),0);
         return;
     }
 
 
     // authentication
-    if (authen(client_socket,client_address,choice)) {
-        send(client_socket, "Authentication successful", sizeof("Authentication successful"), 0);
-        return;
+    if (authen(client_socket,client_address,choice))
+    {
+        memset(tmp, 0, sizeof(tmp));
+        strcpy(tmp, "Authentication successful\n");
+        send(client_socket, tmp, sizeof(tmp), 0);
     } 
     
-    else {
-        send(client_socket, "Authentication failed", sizeof("Authentication failed"), 0);
+    else 
+    {
+        memset(tmp, 0, sizeof(tmp));
+        strcpy(tmp, "Authentication failed\n");
+        send(client_socket,tmp, sizeof(tmp), 0);
         return;
     }
-
 
     switch (choice)
     {
     case 1:
         /* show menu*/
+        memset(tmp, 0, 1024);
+        strcpy(tmp, ".......... Welcome to Admin Menu ..........\n1. Add Student\n2. View Student Details\n3. Add Faculty\n4. View Faculty Details\n5. Activate Student\n6. Block Student\n7. Modify Student Details\n8. Modify Faculty Details\n9. Logout and Exit");
+        int pd=send(client_socket,tmp,strlen(tmp),0);
+        int bytes_received = recv(client_socket, read_buf, sizeof(read_buf), 0);
+        choice=atoi(&read_buf[0]);
+        if (choice < 1 || choice > 9)
+        { 
+            memset(tmp, 0, sizeof(tmp));
+            strcpy(tmp, "invalid input\n");
+            send(client_socket,tmp,sizeof(tmp),0);
+            return;
+        }
+        fun(client_socket,client_address,choice);
         break;
+
+
+
+
     case 2:
-        /* code */
+        /* show menu*/
+        memset(tmp, 0, 1024);
+        strcpy(tmp, ".......... Welcome to Faculty Menu ..........\n1. View Offering Courses\n2. Add New Course\n3. Remove Course\n4. Update CourseDetails\n5. Change Password\n6. Logout and Exit");
+        int pd=send(client_socket,tmp,strlen(tmp),0);
         break;
+
+
+
+
+
     case 3:
-        /* code */
+        /* show menu*/
+        memset(tmp, 0, 1024);
+        strcpy(tmp, ".......... Welcome to Student Menu ..........\n1. View All Courses\n2. Enroll New Course\n3. Drop Course\n4. View Enrolled Course Details\n5. Change Password\n6. Logout and Exit");
+        int pd=send(client_socket,tmp,strlen(tmp),0);
         break;
 
     default:

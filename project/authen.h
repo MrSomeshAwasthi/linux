@@ -19,7 +19,6 @@ bool admin(int client_socket)
     memset(tmp, 0, sizeof(tmp));
     strcpy(tmp, "\nEnter the username: \n");
     send(client_socket, tmp, strlen(tmp), 0);
-    // printf("\nEnter the username: ");
     // Read username from client
     int username_bytes = recv(client_socket, username, sizeof(username), 0);
     if (username_bytes <= 0) 
