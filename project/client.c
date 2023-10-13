@@ -6,14 +6,62 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <pthread.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+void* read_input(void* client_socket)
+{
+    char read_buf[1024];
+    int client_sock = *((int*)client_socket);
+    while (1) {
+        memset(read_buf, 0, 1024);
+        int bytesRead = recv(client_sock,read_buf,1024,0);
+        // printf("read, %d\n",bytesRead);
+        if (bytesRead == -1)
+        {
+            perror("Error reading data from server");
+            break;
+        }
 
-#define BUF_SIZE 1024
+        if (bytesRead == 0)
+        {
+            printf("Server closed the connection.\n" );
+            break;
+        }
+        printf("%s",read_buf);
+    }
 
-int main() {
-    char send_buf[BUF_SIZE], recv_buf[BUF_SIZE];
+    return NULL;
+}
+
+void* user_input(void* client_socket) 
+{
+    char ip_buf[1024];
+    int client_sock = *((int*)client_socket);
+    while (1) {
+        memset(ip_buf, 0, sizeof(ip_buf));
+        fgets(ip_buf, sizeof(ip_buf), stdin);
+        if (strcmp(ip_buf, "quit") == 0)
+        {
+            break; // Exit the loop
+        }
+        int bytesSent = send(client_sock, ip_buf, strlen(ip_buf),0);
+        // printf("ip: %d\n",bytesSent);
+        if (bytesSent == -1)
+        {
+            perror("Error sending data to server");
+            break;
+        }
+    }
+
+    return NULL;
+}
+
+
+int main() 
+{
+    char send_buf[1024], recv_buf[1024];
 
     // Server address and port
     struct sockaddr_in server_address;
@@ -35,25 +83,23 @@ int main() {
         exit(1);
     }
 
-    while (1) {
-        // Communicating with the server
-        printf("C: ");
-        fgets(send_buf, sizeof(send_buf), stdin);
-        int byte_sent = send(client_socket, send_buf, strlen(send_buf), 0);
-        if (byte_sent < 0) {
-            perror("Error sending data");
-            exit(1);
-        }
-
-        memset(recv_buf, 0, sizeof(recv_buf));
-        int byte_received = recv(client_socket, recv_buf, sizeof(recv_buf), 0);
-        if (byte_received < 0) {
-            perror("Error receiving data");
-            exit(1);
-        }
-
-        printf("S: %s", recv_buf);
+    pthread_t read_thread,ip_thread;
+    
+    if(pthread_create(&ip_thread,NULL,user_input,&client_socket)!=0)
+    {
+        perror("thread creation error.\n");
+        exit(1);
     }
+
+    if(pthread_create(&read_thread,NULL,read_input,&client_socket)!=0)
+    {
+        perror("thread creation error.\n");
+        exit(1);
+    }
+
+    pthread_join(ip_thread, NULL);
+    pthread_join(read_thread, NULL);
+    
     close(client_socket);
     return 0;
 }
