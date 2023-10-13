@@ -70,7 +70,7 @@ void query(int client_socket,struct sockaddr_in client_address)
     case 1:
         /* show menu*/
         memset(tmp, 0, 1024);
-        strcpy(tmp, ".......... Welcome to Admin Menu ..........\n1. Add Student\n2. View Student Details\n3. Add Faculty\n4. View Faculty Details\n5. Activate Student\n6. Block Student\n7. Modify Student Details\n8. Modify Faculty Details\n9. Logout and Exit");
+        strcpy(tmp, ".......... Welcome to Admin Menu ..........\n1. Add Student\n2. View Student Details\n3. Add Faculty\n4. View Faculty Details\n5. Activate Student\n6. Block Student\n7. Modify Student Details\n8. Modify Faculty Details\n9. Logout and Exit\n");
         int pd=send(client_socket,tmp,strlen(tmp),0);
         int bytes_received = recv(client_socket, read_buf, sizeof(read_buf), 0);
         choice=atoi(&read_buf[0]);
@@ -90,8 +90,8 @@ void query(int client_socket,struct sockaddr_in client_address)
     case 2:
         /* show menu*/
         memset(tmp, 0, 1024);
-        strcpy(tmp, ".......... Welcome to Faculty Menu ..........\n1. View Offering Courses\n2. Add New Course\n3. Remove Course\n4. Update CourseDetails\n5. Change Password\n6. Logout and Exit");
-        int pd=send(client_socket,tmp,strlen(tmp),0);
+        strcpy(tmp, ".......... Welcome to Faculty Menu ..........\n1. View Offering Courses\n2. Add New Course\n3. Remove Course\n4. Update CourseDetails\n5. Change Password\n6. Logout and Exit\n");
+        pd=send(client_socket,tmp,strlen(tmp),0);
         break;
 
 
@@ -101,8 +101,8 @@ void query(int client_socket,struct sockaddr_in client_address)
     case 3:
         /* show menu*/
         memset(tmp, 0, 1024);
-        strcpy(tmp, ".......... Welcome to Student Menu ..........\n1. View All Courses\n2. Enroll New Course\n3. Drop Course\n4. View Enrolled Course Details\n5. Change Password\n6. Logout and Exit");
-        int pd=send(client_socket,tmp,strlen(tmp),0);
+        strcpy(tmp, ".......... Welcome to Student Menu ..........\n1. View All Courses\n2. Enroll New Course\n3. Drop Course\n4. View Enrolled Course Details\n5. Change Password\n6. Logout and Exit\n");
+        pd=send(client_socket,tmp,strlen(tmp),0);
         break;
 
     default:
