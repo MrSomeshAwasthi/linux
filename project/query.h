@@ -64,25 +64,37 @@ void query(int client_socket,struct sockaddr_in client_address)
         send(client_socket,tmp, sizeof(tmp), 0);
         return;
     }
-
+    int pd,bytes_received,ch;
     switch (choice)
     {
     case 1:
         /* show menu*/
-        memset(tmp, 0, 1024);
-        strcpy(tmp, ".......... Welcome to Admin Menu ..........\n1. Add Student\n2. View Student Details\n3. Add Faculty\n4. View Faculty Details\n5. Activate Student\n6. Block Student\n7. Modify Student Details\n8. Modify Faculty Details\n9. Logout and Exit\n");
-        int pd=send(client_socket,tmp,strlen(tmp),0);
-        int bytes_received = recv(client_socket, read_buf, sizeof(read_buf), 0);
-        choice=atoi(&read_buf[0]);
-        if (choice < 1 || choice > 9)
-        { 
-            memset(tmp, 0, sizeof(tmp));
-            strcpy(tmp, "invalid input\n");
-            send(client_socket,tmp,sizeof(tmp),0);
-            return;
+        while (1)
+        {
+            memset(tmp, 0, 1024);
+            strcpy(tmp, ".......... Welcome to Admin Menu ..........\n1. Add Student\n2. View Student Details\n3. Add Faculty\n4. View Faculty Details\n5. Activate Student\n6. Block Student\n7. Modify Student Details\n8. Modify Faculty Details\n9. Logout and Exit\n");
+            pd=send(client_socket,tmp,strlen(tmp),0);
+            bytes_received = recv(client_socket, read_buf, sizeof(read_buf), 0);
+            ch=atoi(&read_buf[0]);
+            if (ch < 1 || ch > 9)
+            { 
+                memset(tmp, 0, sizeof(tmp));
+                strcpy(tmp, "invalid input\n");
+                send(client_socket,tmp,sizeof(tmp),0);
+                return;
+            }
+            if (ch==9)
+            {
+                memset(tmp, 0, 1024);
+                strcpy(tmp, "logout success\n");
+                pd=send(client_socket,tmp,strlen(tmp),0);
+                exit(1);
+            }
+            
+            fun(client_socket,client_address,ch);
+            break;
         }
-        fun(client_socket,client_address,choice);
-        break;
+        
 
 
 
