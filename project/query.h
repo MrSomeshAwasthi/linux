@@ -101,9 +101,30 @@ void query(int client_socket,struct sockaddr_in client_address)
 
     case 2:
         /* show menu*/
-        memset(tmp, 0, 1024);
-        strcpy(tmp, ".......... Welcome to Faculty Menu ..........\n1. View Offering Courses\n2. Add New Course\n3. Remove Course\n4. Update CourseDetails\n5. Change Password\n6. Logout and Exit\n");
-        pd=send(client_socket,tmp,strlen(tmp),0);
+        while (1)
+        {
+            memset(tmp, 0, 1024);
+            strcpy(tmp, ".......... Welcome to Faculty Menu ..........\n1. View Offering Courses\n2. Add New Course\n3. Remove Course\n4. Update CourseDetails\n5. Change Password\n6. Logout and Exit\n");
+            pd=send(client_socket,tmp,strlen(tmp),0);
+            bytes_received = recv(client_socket, read_buf, sizeof(read_buf), 0);
+            ch=atoi(&read_buf[0]);
+            if (ch < 1 || ch > 6)
+            { 
+                memset(tmp, 0, sizeof(tmp));
+                strcpy(tmp, "invalid input\n");
+                send(client_socket,tmp,sizeof(tmp),0);
+                return;
+            }
+            if (ch==6)
+            {
+                memset(tmp, 0, 1024);
+                strcpy(tmp, "logout success\n");
+                pd=send(client_socket,tmp,strlen(tmp),0);
+                exit(1);
+            }
+            
+            fun(client_socket,client_address,ch);
+        }
         break;
 
 
@@ -112,9 +133,30 @@ void query(int client_socket,struct sockaddr_in client_address)
 
     case 3:
         /* show menu*/
-        memset(tmp, 0, 1024);
-        strcpy(tmp, ".......... Welcome to Student Menu ..........\n1. View All Courses\n2. Enroll New Course\n3. Drop Course\n4. View Enrolled Course Details\n5. Change Password\n6. Logout and Exit\n");
-        pd=send(client_socket,tmp,strlen(tmp),0);
+        while (1)
+        {
+            memset(tmp, 0, 1024);
+            strcpy(tmp, ".......... Welcome to Student Menu ..........\n1. View All Courses\n2. Enroll New Course\n3. Drop Course\n4. View Enrolled Course Details\n5. Change Password\n6. Logout and Exit\n");
+            pd=send(client_socket,tmp,strlen(tmp),0);
+            bytes_received = recv(client_socket, read_buf, sizeof(read_buf), 0);
+            ch=atoi(&read_buf[0]);
+            if (ch < 1 || ch > 6)
+            { 
+                memset(tmp, 0, sizeof(tmp));
+                strcpy(tmp, "invalid input\n");
+                send(client_socket,tmp,sizeof(tmp),0);
+                return;
+            }
+            if (ch==6)
+            {
+                memset(tmp, 0, 1024);
+                strcpy(tmp, "logout success\n");
+                pd=send(client_socket,tmp,strlen(tmp),0);
+                exit(1);
+            }
+            
+            fun(client_socket,client_address,ch);
+        }
         break;
 
     default:

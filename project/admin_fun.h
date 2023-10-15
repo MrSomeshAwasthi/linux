@@ -154,35 +154,9 @@ void add_student(int client_socket)
 
     // course
 
+    // Initialize the courses array
+    memset(s.course, 0, sizeof(s.course));  
 
-    memset(s.course, 0, sizeof(s.course));  // Initialize the courses array
-    // int num_courses = 0;  // Initialize the number of courses to 0
-
-    // while (num_courses < 5)  // You can adjust the limit as needed
-    // {
-    //     // Input for each course
-    //     memset(buf, 0, sizeof(buf));
-    //     snprintf(buf, sizeof(buf), "Enter course %d: \n", num_courses + 1);
-    //     send(client_socket, buf, strlen(buf), 0);
-
-    //     memset(buf, 0, sizeof(buf));
-    //     bytes_received = recv(client_socket, buf, sizeof(buf), 0);
-
-    //     if (bytes_received < 1)
-    //     {
-    //         memset(buf, 0, sizeof(buf));
-    //         strcpy(buf, "Error\n");
-    //         send(client_socket, buf, strlen(buf), 0);
-    //     }
-    //     else
-    //     {
-    //         // Copy the course name to the student's courses array
-    //         strcpy(s.course[num_courses], buf);
-    //         s.course[num_courses][strlen(s.course[num_courses])-1]='\0';
-    //         num_courses++;
-    //     }
-    // }
-    
     // status
     memset(buf, 0, sizeof(buf));
     strcpy(buf, "8. Enter status:\n");
