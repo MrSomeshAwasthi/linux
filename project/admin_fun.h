@@ -239,7 +239,7 @@ void view_student(int client_socket)
         // Read student records from the file one by one and look for a match
         while (read(fd, &s, sizeof(struct student)) > 0)
         {
-            printf("namee%sfind%s\n",s.username,username_to_find);
+            //printf("namee%sfind%s\n",s.username,username_to_find);
             if (strcmp(s.username, username_to_find) == 0)
             {
                 // printf("%d:%d:%s:%s:%s:%s:%s\n",s.age,s.status,s.username,s.password,s.name,s.email,s.address);
@@ -447,10 +447,10 @@ void view_faculty(int client_socket)
                 // Send each subject in the course array
                 for (int i = 0; i < 5; i++) 
                 {
-                    if(s.course[i]=="\0")
+                    if(f.course[i]=="\0")
                         break;
 
-                    send(client_socket, s.course[i], sizeof(s.course[i]), 0);
+                    send(client_socket, f.course[i], sizeof(f.course[i]), 0);
                     sleep(0.5);
                 }
                 faculty_found = 1;
@@ -468,6 +468,387 @@ void view_faculty(int client_socket)
     }
 
     close(fd); // Close the file
+}
+
+
+void activate(int client_socket)
+{
+    char username_to_find[10];
+    int fd = open("data/student.txt", O_RDWR); 
+    if (fd == -1)
+    {
+        perror("Error opening file");
+        return;
+    }
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "Enter the username of the student you want to activate: \n");
+    send(client_socket, buf, strlen(buf), 0);
+
+    memset(buf, 0, sizeof(buf));
+    int bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+
+    if (bytes_received < 1)
+    {
+        // Handle error if no data received from the client
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf, "Error receiving data from client\n");
+        send(client_socket, buf, strlen(buf), 0);
+        exit(1);
+    }
+    else
+    {
+        // Copy the received username to the search query
+        strncpy(username_to_find, buf, sizeof(username_to_find));
+        username_to_find[9]='\0';
+        struct student s;
+        int student_found = 0;
+        lseek(fd,0,SEEK_SET);
+        // Read student records from the file one by one and look for a match
+        while (read(fd, &s, sizeof(struct student)) > 0)
+        {
+            //printf("namee%sfind%s\n",s.username,username_to_find);
+            if (strcmp(s.username, username_to_find) == 0)
+            {
+                s.status=1;
+                send(client_socket,"done\n",strlen("done\n"),0);
+                break;
+            }
+        }
+    }
+}
+
+
+void deactivate(int client_socket)
+{
+    char username_to_find[10];
+    int fd = open("data/student.txt", O_RDWR); 
+    if (fd == -1)
+    {
+        perror("Error opening file");
+        return;
+    }
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "Enter the username of the student you want to activate: \n");
+    send(client_socket, buf, strlen(buf), 0);
+
+    memset(buf, 0, sizeof(buf));
+    int bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+
+    if (bytes_received < 1)
+    {
+        // Handle error if no data received from the client
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf, "Error receiving data from client\n");
+        send(client_socket, buf, strlen(buf), 0);
+        exit(1);
+    }
+    else
+    {
+        // Copy the received username to the search query
+        strncpy(username_to_find, buf, sizeof(username_to_find));
+        username_to_find[9]='\0';
+        struct student s;
+        int student_found = 0;
+        lseek(fd,0,SEEK_SET);
+        // Read student records from the file one by one and look for a match
+        while (read(fd, &s, sizeof(struct student)) > 0)
+        {
+            //printf("namee%sfind%s\n",s.username,username_to_find);
+            if (strcmp(s.username, username_to_find) == 0)
+            {
+                s.status=0;
+                send(client_socket,"done\n",strlen("done\n"),0);
+                break;
+            }
+        }
+    }
+}
+
+
+void modify_stud(int client_socket)
+{
+    char username_to_find[10];
+    int fd = open("data/student.txt", O_RDWR); 
+    if (fd == -1)
+    {
+        perror("Error opening file");
+        return;
+    }
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "Enter the username of the student you want to modify: \n");
+    send(client_socket, buf, strlen(buf), 0);
+
+    memset(buf, 0, sizeof(buf));
+    int bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+
+    if (bytes_received < 1)
+    {
+        // Handle error if no data received from the client
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf, "Error receiving data from client\n");
+        send(client_socket, buf, strlen(buf), 0);
+        exit(1);
+    }
+    else
+    {
+        // Copy the received username to the search query
+        strncpy(username_to_find, buf, sizeof(username_to_find));
+        username_to_find[9]='\0';
+        struct student s;
+        int student_found = 0;
+        lseek(fd,0,SEEK_SET);
+        // Read student records from the file one by one and look for a match
+        while (read(fd, &s, sizeof(struct student)) > 0)
+        {
+            //printf("namee%sfind%s\n",s.username,username_to_find);
+            if (strcmp(s.username, username_to_find) == 0)
+            {
+                
+                // username
+                memset(buf, 0, sizeof(buf));
+                strcpy(buf, "1. Enter username:\n");
+                send(client_socket,buf,strlen(buf),0);
+                memset(buf,0,1024);
+                int bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+                if(bytes_received<1)
+                {
+                    memset(buf, 0, sizeof(buf));
+                    strcpy(buf,"Error\n");
+                    send(client_socket,buf,strlen(buf),0);
+                }
+                strcpy(s.username,buf);
+                s.username[strlen(s.username)-1]='\0';
+
+
+                // password
+                memset(buf, 0, sizeof(buf));
+                strcpy(buf, "2. Enter password:\n");
+                send(client_socket,buf,strlen(buf),0);
+                memset(buf,0,sizeof(buf));
+                bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+                if(bytes_received<1)
+                {
+                    memset(buf, 0, sizeof(buf));
+                    strcpy(buf,"Error\n");
+                    send(client_socket,buf,strlen(buf),0);
+                }
+                strcpy(s.password,buf);
+                s.password[strlen(s.password)-1]='\0';
+
+
+                // name
+                memset(buf, 0, sizeof(buf));
+                strcpy(buf, "3. Enter name:\n");
+                send(client_socket,buf,strlen(buf),0);
+                memset(buf,0,sizeof(buf));
+                bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+                if(bytes_received<1)
+                {
+                    memset(buf, 0, sizeof(buf));
+                    strcpy(buf,"Error\n");
+                    send(client_socket,buf,strlen(buf),0);
+                }
+                strcpy(s.name,buf);
+                s.name[strlen(s.name)-1]='\0';
+
+                // age
+                memset(buf, 0, sizeof(buf));
+                strcpy(buf, "4. Enter age:\n");
+                send(client_socket,buf,strlen(buf),0);
+                memset(buf,0,sizeof(buf));
+                bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+                if(bytes_received<1)
+                {
+                    memset(buf, 0, sizeof(buf));
+                    strcpy(buf,"Error\n");
+                    send(client_socket,buf,strlen(buf),0);
+                }
+                s.age=atoi(buf);
+
+                // email
+                memset(buf, 0, sizeof(buf));
+                strcpy(buf, "5. Enter email id:\n");
+                send(client_socket,buf,strlen(buf),0);
+                memset(buf,0,sizeof(buf));
+                bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+                if(bytes_received<1)
+                {
+                    memset(buf, 0, sizeof(buf));
+                    strcpy(buf,"Error\n");
+                    send(client_socket,buf,strlen(buf),0);
+                }
+                strcpy(s.email,buf);
+                s.email[strlen(s.email)-1]='\0';
+
+
+                // address
+                memset(buf, 0, sizeof(buf));
+                strcpy(buf, "6. Enter address:\n");
+                send(client_socket,buf,strlen(buf),0);
+                memset(buf,0,sizeof(buf));
+                bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+                if(bytes_received<1)
+                {
+                    memset(buf, 0, sizeof(buf));
+                    strcpy(buf,"Error\n");
+                    send(client_socket,buf,strlen(buf),0);
+                }
+                strcpy(s.address,buf);
+                s.address[strlen(s.address)-1]='\0';
+            }
+        }
+    }
+}
+
+
+void modify_fac(int client_socket)
+{
+    char username_to_find[10];
+    int fd = open("data/student.txt", O_RDWR); 
+    if (fd == -1)
+    {
+        perror("Error opening file");
+        return;
+    }
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "Enter the username of the professor you want to modify: \n");
+    send(client_socket, buf, strlen(buf), 0);
+
+    memset(buf, 0, sizeof(buf));
+    int bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+
+    if (bytes_received < 1)
+    {
+        // Handle error if no data received from the client
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf, "Error receiving data from client\n");
+        send(client_socket, buf, strlen(buf), 0);
+        exit(1);
+    }
+    else
+    {
+        // Copy the received username to the search query
+        strncpy(username_to_find, buf, sizeof(username_to_find));
+        username_to_find[9]='\0';
+        struct faculty f;
+        int student_found = 0;
+        lseek(fd,0,SEEK_SET);
+        // Read student records from the file one by one and look for a match
+        while (read(fd, &s, sizeof(struct student)) > 0)
+        {
+            //printf("namee%sfind%s\n",s.username,username_to_find);
+            if (strcmp(s.username, username_to_find) == 0)
+            {
+                // username
+                memset(buf, 0, sizeof(buf));
+                strcpy(buf, "1. Enter username:\n");
+                send(client_socket,buf,strlen(buf),0);
+                memset(buf,0,1024);
+                int bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+                if(bytes_received<1)
+                {
+                    memset(buf, 0, sizeof(buf));
+                    strcpy(buf,"Error\n");
+                    send(client_socket,buf,strlen(buf),0);
+                }
+                strcpy(f.username,buf);
+                f.username[strlen(f.username)-1]='\0';
+
+
+                // password
+                memset(buf, 0, sizeof(buf));
+                strcpy(buf, "2. Enter password:\n");
+                send(client_socket,buf,strlen(buf),0);
+                memset(buf,0,sizeof(buf));
+                bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+                if(bytes_received<1)
+                {
+                    memset(buf, 0, sizeof(buf));
+                    strcpy(buf,"Error\n");
+                    send(client_socket,buf,strlen(buf),0);
+                }
+                strcpy(f.password,buf);
+                f.password[strlen(f.password)-1]='\0';
+
+
+                // name
+                memset(buf, 0, sizeof(buf));
+                strcpy(buf, "3. Enter name:\n");
+                send(client_socket,buf,strlen(buf),0);
+                memset(buf,0,sizeof(buf));
+                bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+                if(bytes_received<1)
+                {
+                    memset(buf, 0, sizeof(buf));
+                    strcpy(buf,"Error\n");
+                    send(client_socket,buf,strlen(buf),0);
+                }
+                strcpy(f.name,buf);
+                f.name[strlen(f.name)-1]='\0';
+
+                // dept
+                memset(buf, 0, sizeof(buf));
+                strcpy(buf, "4. Enter dept:\n");
+                send(client_socket,buf,strlen(buf),0);
+                memset(buf,0,sizeof(buf));
+                bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+                if(bytes_received<1)
+                {
+                    memset(buf, 0, sizeof(buf));
+                    strcpy(buf,"Error\n");
+                    send(client_socket,buf,strlen(buf),0);
+                }
+                strcpy(f.dept,buf);
+                f.dept[strlen(f.dept)-1]='\0';
+
+                // address
+                memset(buf, 0, sizeof(buf));
+                strcpy(buf, "5. Enter designation:\n");
+                send(client_socket,buf,strlen(buf),0);
+                memset(buf,0,sizeof(buf));
+                bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+                if(bytes_received<1)
+                {
+                    memset(buf, 0, sizeof(buf));
+                    strcpy(buf,"Error\n");
+                    send(client_socket,buf,strlen(buf),0);
+                }
+                strcpy(f.designation,buf);
+                f.designation[strlen(f.designation)-1]='\0';
+
+                // email
+                memset(buf, 0, sizeof(buf));
+                strcpy(buf, "5. Enter email id:\n");
+                send(client_socket,buf,strlen(buf),0);
+                memset(buf,0,sizeof(buf));
+                bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+                if(bytes_received<1)
+                {
+                    memset(buf, 0, sizeof(buf));
+                    strcpy(buf,"Error\n");
+                    send(client_socket,buf,strlen(buf),0);
+                }
+                strcpy(f.email,buf);
+                f.email[strlen(f.email)-1]='\0';
+
+
+                // address
+                memset(buf, 0, sizeof(buf));
+                strcpy(buf, "6. Enter address:\n");
+                send(client_socket,buf,strlen(buf),0);
+                memset(buf,0,sizeof(buf));
+                bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+                if(bytes_received<1)
+                {
+                    memset(buf, 0, sizeof(buf));
+                    strcpy(buf,"Error\n");
+                    send(client_socket,buf,strlen(buf),0);
+                }
+                strcpy(f.address,buf);
+                f.address[strlen(f.address)-1]='\0';
+            }
+        }
+    }
 }
 
 
@@ -491,6 +872,21 @@ void fun(int client_socket,struct sockaddr_in client_address,int choice)
             view_faculty(client_socket);
             break;
 
+        case 5:
+            activate(client_socket);
+            break;
+
+        case 6:
+            deactivate(client_socket);
+            break;
+        
+        case 7:
+            modify_stud(client_socket);
+            break;
+
+        case 8:
+            modify_fac(client_socket);
+            break;
 
         default:
             break;
