@@ -4,6 +4,7 @@
 */
 
 #include <stdio.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -12,7 +13,30 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-#include "admin_fun.h"
+
+struct sample1
+{
+    char username[10];  
+    char password[10];  
+    char name[32];
+    int age;  
+    char email[129];  
+    char address[129];  
+    char course[5][6]; 
+    int status;
+};
+struct sample2
+{
+    char username[10];  
+    char password[10];  
+    char name[32];
+    char dept[32];  
+    char designation[20];
+    char email[129];  
+    char address[129];  
+    char course[5][6]; 
+};
+
 char username[128],password[128],tmp[1024];
 
 bool admin(int client_socket)
@@ -99,13 +123,16 @@ bool facultys(int client_socket)
     }
     password[password_bytes-1] = '\0';
 
-    struct faculty f;
+    struct sample1 f;
      lseek(fd,0,SEEK_SET);
     // Read student records from the file one by one and look for a match
-    while (read(fd, &f, sizeof(struct faculty)) > 0)
+    while (read(fd, &f, sizeof(struct sample1)) > 0)
     {
-        if (strcmp((username, f.username) || (password, f.password) ) != 0)
+        //if ((strcmp(username, f.username) || strcpy(password, f.password) ) != 0)
+        if (strcmp(username, f.username) != 0 && strcmp(password, f.password) != 0)
         {
+            printf("%s%s\n",f.username,username);
+            printf("%s%s\n",f.password,password);
             memset(tmp, 0, sizeof(tmp));
             strcpy(tmp, "Invalid username and password\n");
             memset(username, 0, sizeof(username));
@@ -160,13 +187,16 @@ bool students(int client_socket)
     }
     password[password_bytes-1] = '\0';
 
-    struct student s;
+    struct sample2 s;
      lseek(fd,0,SEEK_SET);
     // Read student records from the file one by one and look for a match
-    while (read(fd, &s, sizeof(struct student)) > 0)
+    while (read(fd, &s, sizeof(struct sample2)) > 0)
     {
-        if (strcmp((s.username, username) || (s.password, password) ) != 0)
+        //if ((strcmp(s.username, username) || strcpy(s.password, password) ) != 0)
+        if (strcmp(s.username, username) != 0 && strcmp(s.password, password) != 0)
         {
+            printf("%s%s\n",s.username,username);
+            printf("%s%s\n",s.password,password);
             memset(tmp, 0, sizeof(tmp));
             strcpy(tmp, "Invalid username and password\n");
             memset(username, 0, sizeof(username));
