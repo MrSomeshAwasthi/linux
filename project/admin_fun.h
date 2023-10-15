@@ -52,7 +52,7 @@ struct faculty
     char course[5][6]; 
     
 };
-char buf1[1024];
+char buf[1024];
 
 void add_student(int client_socket)
 {
@@ -61,141 +61,141 @@ void add_student(int client_socket)
 
 
     // username
-    memset(buf1, 0, sizeof(buf1));
-    strcpy(buf1, "1. Enter username:\n");
-    send(client_socket,buf1,strlen(buf1),0);
-    memset(buf1,0,1024);
-    int bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "1. Enter username:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,1024);
+    int bytes_received = recv(client_socket, buf, sizeof(buf), 0);
     if(bytes_received<1)
     {
-        memset(buf1, 0, sizeof(buf1));
-        strcpy(buf1,"Error\n");
-        send(client_socket,buf1,strlen(buf1),0);
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
     }
-    strcpy(s.username,buf1);
+    strcpy(s.username,buf);
     s.username[strlen(s.username)-1]='\0';
 
 
     // password
-    memset(buf1, 0, sizeof(buf1));
-    strcpy(buf1, "2. Enter password:\n");
-    send(client_socket,buf1,strlen(buf1),0);
-    memset(buf1,0,sizeof(buf1));
-    bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "2. Enter password:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
     if(bytes_received<1)
     {
-        memset(buf1, 0, sizeof(buf1));
-        strcpy(buf1,"Error\n");
-        send(client_socket,buf1,strlen(buf1),0);
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
     }
-    strcpy(s.password,buf1);
+    strcpy(s.password,buf);
     s.password[strlen(s.password)-1]='\0';
 
 
     // name
-    memset(buf1, 0, sizeof(buf1));
-    strcpy(buf1, "3. Enter name:\n");
-    send(client_socket,buf1,strlen(buf1),0);
-    memset(buf1,0,sizeof(buf1));
-    bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "3. Enter name:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
     if(bytes_received<1)
     {
-        memset(buf1, 0, sizeof(buf1));
-        strcpy(buf1,"Error\n");
-        send(client_socket,buf1,strlen(buf1),0);
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
     }
-    strcpy(s.name,buf1);
+    strcpy(s.name,buf);
     s.name[strlen(s.name)-1]='\0';
 
     // age
-    memset(buf1, 0, sizeof(buf1));
-    strcpy(buf1, "4. Enter age:\n");
-    send(client_socket,buf1,strlen(buf1),0);
-    memset(buf1,0,sizeof(buf1));
-    bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "4. Enter age:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
     if(bytes_received<1)
     {
-        memset(buf1, 0, sizeof(buf1));
-        strcpy(buf1,"Error\n");
-        send(client_socket,buf1,strlen(buf1),0);
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
     }
-    s.age=atoi(buf1);
+    s.age=atoi(buf);
 
     // email
-    memset(buf1, 0, sizeof(buf1));
-    strcpy(buf1, "5. Enter email id:\n");
-    send(client_socket,buf1,strlen(buf1),0);
-    memset(buf1,0,sizeof(buf1));
-    bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "5. Enter email id:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
     if(bytes_received<1)
     {
-        memset(buf1, 0, sizeof(buf1));
-        strcpy(buf1,"Error\n");
-        send(client_socket,buf1,strlen(buf1),0);
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
     }
-    strcpy(s.email,buf1);
+    strcpy(s.email,buf);
     s.email[strlen(s.email)-1]='\0';
 
 
     // address
-    memset(buf1, 0, sizeof(buf1));
-    strcpy(buf1, "6. Enter address:\n");
-    send(client_socket,buf1,strlen(buf1),0);
-    memset(buf1,0,sizeof(buf1));
-    bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "6. Enter address:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
     if(bytes_received<1)
     {
-        memset(buf1, 0, sizeof(buf1));
-        strcpy(buf1,"Error\n");
-        send(client_socket,buf1,strlen(buf1),0);
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
     }
-    strcpy(s.address,buf1);
+    strcpy(s.address,buf);
     s.address[strlen(s.address)-1]='\0';
 
     // course
 
 
     memset(s.course, 0, sizeof(s.course));  // Initialize the courses array
-    int num_courses = 0;  // Initialize the number of courses to 0
+    // int num_courses = 0;  // Initialize the number of courses to 0
 
-    while (num_courses < 5)  // You can adjust the limit as needed
-    {
-        // Input for each course
-        memset(buf1, 0, sizeof(buf1));
-        snprintf(buf1, sizeof(buf1), "Enter course %d: \n", num_courses + 1);
-        send(client_socket, buf1, strlen(buf1), 0);
+    // while (num_courses < 5)  // You can adjust the limit as needed
+    // {
+    //     // Input for each course
+    //     memset(buf, 0, sizeof(buf));
+    //     snprintf(buf, sizeof(buf), "Enter course %d: \n", num_courses + 1);
+    //     send(client_socket, buf, strlen(buf), 0);
 
-        memset(buf1, 0, sizeof(buf1));
-        bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
+    //     memset(buf, 0, sizeof(buf));
+    //     bytes_received = recv(client_socket, buf, sizeof(buf), 0);
 
-        if (bytes_received < 1)
-        {
-            memset(buf1, 0, sizeof(buf1));
-            strcpy(buf1, "Error\n");
-            send(client_socket, buf1, strlen(buf1), 0);
-        }
-        else
-        {
-            // Copy the course name to the student's courses array
-            strcpy(s.course[num_courses], buf1);
-            s.course[num_courses][strlen(s.course[num_courses])-1]='\0';
-            num_courses++;
-        }
-    }
+    //     if (bytes_received < 1)
+    //     {
+    //         memset(buf, 0, sizeof(buf));
+    //         strcpy(buf, "Error\n");
+    //         send(client_socket, buf, strlen(buf), 0);
+    //     }
+    //     else
+    //     {
+    //         // Copy the course name to the student's courses array
+    //         strcpy(s.course[num_courses], buf);
+    //         s.course[num_courses][strlen(s.course[num_courses])-1]='\0';
+    //         num_courses++;
+    //     }
+    // }
     
     // status
-    memset(buf1, 0, sizeof(buf1));
-    strcpy(buf1, "8. Enter status:\n");
-    send(client_socket,buf1,strlen(buf1),0);
-    memset(buf1,0,sizeof(buf1));
-    bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "8. Enter status:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
     if(bytes_received<1)
     {
-        memset(buf1, 0, sizeof(buf1));
-        strcpy(buf1,"Error\n");
-        send(client_socket,buf1,strlen(buf1),0);
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
     }
-    s.status=atoi(buf1);
+    s.status=atoi(buf);
 
 
     write(fd,&s,sizeof(s));    
@@ -213,27 +213,25 @@ void view_student(int client_socket)
         perror("Error opening file");
         return;
     }
-    memset(buf1, 0, sizeof(buf1));
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "Enter the username of the student you want to view: \n");
+    send(client_socket, buf, strlen(buf), 0);
 
-    // Ask the user to enter the username of the student they want to view
-
-    strcpy(buf1, "Enter the username of the student you want to view: \n");
-    send(client_socket, buf1, strlen(buf1), 0);
-
-
-    
-    memset(buf1, 0, sizeof(buf1));
-    int bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
+    memset(buf, 0, sizeof(buf));
+    int bytes_received = recv(client_socket, buf, sizeof(buf), 0);
 
     if (bytes_received < 1)
     {
         // Handle error if no data received from the client
-        perror("Error receiving data from client");
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf, "Error receiving data from client\n");
+        send(client_socket, buf, strlen(buf), 0);
+        exit(1);
     }
     else
     {
         // Copy the received username to the search query
-        strncpy(username_to_find, buf1, sizeof(username_to_find));
+        strncpy(username_to_find, buf, sizeof(username_to_find));
         username_to_find[9]='\0';
         struct student s;
         int student_found = 0;
@@ -241,44 +239,34 @@ void view_student(int client_socket)
         // Read student records from the file one by one and look for a match
         while (read(fd, &s, sizeof(struct student)) > 0)
         {
-            send(client_socket, "1. username :\n", sizeof("1. username :\n"), 0);
-            send(client_socket, s.username, sizeof(s.username), 0);
-
-            send(client_socket, "2. password :\n", sizeof("2. password :\n"), 0);
-            send(client_socket, s.password, sizeof(s.password), 0);
-
-            send(client_socket, "3. name :\n", sizeof("3. name :\n"), 0);
-            send(client_socket, s.name, sizeof(s.name), 0);
-
-            send(client_socket, "4. age :\n", sizeof("4. age :\n"), 0);
-            send(client_socket, &s.age, sizeof(s.age), 0);
-
-            send(client_socket, "5. email :\n", sizeof("5. email :\n"), 0);
-            send(client_socket, s.email, sizeof(s.email), 0);
-
-            send(client_socket, "6. address :\n", sizeof("6. address :\n"), 0);
-            send(client_socket, s.address, sizeof(s.address), 0);
-
-            send(client_socket, "7. status :\n", sizeof("7. status :\n"), 0);
-            send(client_socket, s.status, sizeof(s.status), 0)
-
-            // Send each subject in the course array
-            send(client_socket, "8. course :\n", sizeof("8. course :\n"), 0);
-            for (int i = 0; i < 5; i++) 
+            printf("namee%sfind%s\n",s.username,username_to_find);
+            if (strcmp(s.username, username_to_find) == 0)
             {
-                send(client_socket, s.course[i], sizeof(s.course[i]), 0);
+                // printf("%d:%d:%s:%s:%s:%s:%s\n",s.age,s.status,s.username,s.password,s.name,s.email,s.address);
+                //send(client_socket, &s, sizeof(struct student), 0);
+                snprintf(buf, sizeof(buf), "\n1. username : %s\n2. password : %s\n3. name : %s\n4. age : %d\n5. email : %s\n6. address : %s\n7. status : %d\n8. course :\n", s.username,s.password,s.name,s.age,s.email,s.address,s.status);
+                send(client_socket, buf, strlen(buf), 0);
+                //send(client_socket, "\n8. course :\n", sizeof("8. course :\n"), 0);
+                for (int i = 0; i < 5; i++) 
+                {   
+                    if(s.course[i]=="\0")
+                        break;
+
+                    send(client_socket, s.course[i], sizeof(s.course[i]), 0);
+                    sleep(0.5);
+                }
+                student_found = 1;
+                break; // Student found, no need to continue searching
             }
 
-            student_found = 1;
-            break; // Student found, no need to continue searching
         }
 
         if (!student_found)
         {
             // Student not found, send an error message to the client
-            memset(buf1, 0, sizeof(buf1));
-            strcpy(buf1, "Student not found\n");
-            send(client_socket, buf1, strlen(buf1), 0);
+            memset(buf, 0, sizeof(buf));
+            strcpy(buf, "Student not found\n");
+            send(client_socket, buf, strlen(buf), 0);
         }
     }
 
@@ -294,144 +282,118 @@ void add_faculty(int client_socket)
 
     
     // username
-    memset(buf1, 0, sizeof(buf1));
-    strcpy(buf1, "1. Enter username:\n");
-    send(client_socket,buf1,strlen(buf1),0);
-    memset(buf1,0,1024);
-    int bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "1. Enter username:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,1024);
+    int bytes_received = recv(client_socket, buf, sizeof(buf), 0);
     if(bytes_received<1)
     {
-        memset(buf1, 0, sizeof(buf1));
-        strcpy(buf1,"Error\n");
-        send(client_socket,buf1,strlen(buf1),0);
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
     }
-    strcpy(f.username,buf1);
+    strcpy(f.username,buf);
     f.username[strlen(f.username)-1]='\0';
 
 
     // password
-    memset(buf1, 0, sizeof(buf1));
-    strcpy(buf1, "2. Enter password:\n");
-    send(client_socket,buf1,strlen(buf1),0);
-    memset(buf1,0,sizeof(buf1));
-    bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "2. Enter password:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
     if(bytes_received<1)
     {
-        memset(buf1, 0, sizeof(buf1));
-        strcpy(buf1,"Error\n");
-        send(client_socket,buf1,strlen(buf1),0);
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
     }
-    strcpy(f.password,buf1);
+    strcpy(f.password,buf);
     f.password[strlen(f.password)-1]='\0';
 
 
     // name
-    memset(buf1, 0, sizeof(buf1));
-    strcpy(buf1, "3. Enter name:\n");
-    send(client_socket,buf1,strlen(buf1),0);
-    memset(buf1,0,sizeof(buf1));
-    bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "3. Enter name:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
     if(bytes_received<1)
     {
-        memset(buf1, 0, sizeof(buf1));
-        strcpy(buf1,"Error\n");
-        send(client_socket,buf1,strlen(buf1),0);
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
     }
-    strcpy(f.name,buf1);
+    strcpy(f.name,buf);
     f.name[strlen(f.name)-1]='\0';
 
     // dept
-    memset(buf1, 0, sizeof(buf1));
-    strcpy(buf1, "4. Enter dept:\n");
-    send(client_socket,buf1,strlen(buf1),0);
-    memset(buf1,0,sizeof(buf1));
-    bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "4. Enter dept:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
     if(bytes_received<1)
     {
-        memset(buf1, 0, sizeof(buf1));
-        strcpy(buf1,"Error\n");
-        send(client_socket,buf1,strlen(buf1),0);
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
     }
-    s.age=atoi(buf1);
+    strcpy(f.dept,buf);
+    f.dept[strlen(f.dept)-1]='\0';
+
+    // address
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "5. Enter designation:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+    if(bytes_received<1)
+    {
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
+    }
+    strcpy(f.designation,buf);
+    f.designation[strlen(f.designation)-1]='\0';
 
     // email
-    memset(buf1, 0, sizeof(buf1));
-    strcpy(buf1, "5. Enter email id:\n");
-    send(client_socket,buf1,strlen(buf1),0);
-    memset(buf1,0,sizeof(buf1));
-    bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "5. Enter email id:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
     if(bytes_received<1)
     {
-        memset(buf1, 0, sizeof(buf1));
-        strcpy(buf1,"Error\n");
-        send(client_socket,buf1,strlen(buf1),0);
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
     }
-    strcpy(s.email,buf1);
-    s.email[strlen(s.email)-1]='\0';
+    strcpy(f.email,buf);
+    f.email[strlen(f.email)-1]='\0';
 
 
     // address
-    memset(buf1, 0, sizeof(buf1));
-    strcpy(buf1, "6. Enter address:\n");
-    send(client_socket,buf1,strlen(buf1),0);
-    memset(buf1,0,sizeof(buf1));
-    bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "6. Enter address:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
     if(bytes_received<1)
     {
-        memset(buf1, 0, sizeof(buf1));
-        strcpy(buf1,"Error\n");
-        send(client_socket,buf1,strlen(buf1),0);
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
     }
-    strcpy(s.address,buf1);
-    s.address[strlen(s.address)-1]='\0';
+    strcpy(f.address,buf);
+    f.address[strlen(f.address)-1]='\0';
 
     // course
+ 
+    memset(f.course, 0, sizeof(f.course));  // Initialize the courses array
 
-
-    memset(s.course, 0, sizeof(s.course));  // Initialize the courses array
-    int num_courses = 0;  // Initialize the number of courses to 0
-
-    while (num_courses < 5)  // You can adjust the limit as needed
-    {
-        // Input for each course
-        memset(buf1, 0, sizeof(buf1));
-        snprintf(buf1, sizeof(buf1), "Enter course %d: \n", num_courses + 1);
-        send(client_socket, buf1, strlen(buf1), 0);
-
-        memset(buf1, 0, sizeof(buf1));
-        bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
-
-        if (bytes_received < 1)
-        {
-            memset(buf1, 0, sizeof(buf1));
-            strcpy(buf1, "Error\n");
-            send(client_socket, buf1, strlen(buf1), 0);
-        }
-        else
-        {
-            // Copy the course name to the student's courses array
-            strcpy(s.course[num_courses], buf1);
-            s.course[num_courses][strlen(s.course[num_courses])-1]='\0';
-            num_courses++;
-        }
-    }
-    
-    // status
-    memset(buf1, 0, sizeof(buf1));
-    strcpy(buf1, "8. Enter status:\n");
-    send(client_socket,buf1,strlen(buf1),0);
-    memset(buf1,0,sizeof(buf1));
-    bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
-    if(bytes_received<1)
-    {
-        memset(buf1, 0, sizeof(buf1));
-        strcpy(buf1,"Error\n");
-        send(client_socket,buf1,strlen(buf1),0);
-    }
-    s.status=atoi(buf1);
-
-
-    write(fd,&s,sizeof(s));    
+    write(fd,&f,sizeof(f));    
 
     return;
 }
@@ -440,64 +402,68 @@ void add_faculty(int client_socket)
 void view_faculty(int client_socket)
 {
     char username_to_find[10];
-    int fd = open("data/student.txt", O_RDONLY); 
+    int fd = open("data/faculty.txt", O_RDONLY); 
     if (fd == -1)
     {
         perror("Error opening file");
         return;
     }
-    memset(buf1, 0, sizeof(buf1));
+    memset(buf, 0, sizeof(buf));
 
     // Ask the user to enter the username of the student they want to view
 
-    strcpy(buf1, "Enter the username of the student you want to view: \n");
-    send(client_socket, buf1, strlen(buf1), 0);
+    strcpy(buf, "Enter the username of the faculty you want to view: \n");
+    send(client_socket, buf, strlen(buf), 0);
 
 
     
-    memset(buf1, 0, sizeof(buf1));
-    int bytes_received = recv(client_socket, buf1, sizeof(buf1), 0);
+    memset(buf, 0, sizeof(buf));
+    int bytes_received = recv(client_socket, buf, sizeof(buf), 0);
 
     if (bytes_received < 1)
     {
         // Handle error if no data received from the client
-        perror("Error receiving data from client");
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf, "Error receiving data from client\n");
+        send(client_socket, buf, strlen(buf), 0);
+        exit(1);
     }
     else
     {
         // Copy the received username to the search query
-        strncpy(username_to_find, buf1, sizeof(username_to_find));
+        strncpy(username_to_find, buf, sizeof(username_to_find));
         username_to_find[9]='\0';
-        struct student s;
-        int student_found = 0;
+        struct faculty f;
+        int faculty_found = 0;
         lseek(fd,0,SEEK_SET);
         // Read student records from the file one by one and look for a match
-        while (read(fd, &s, sizeof(struct student)) > 0)
+        while (read(fd, &f, sizeof(struct faculty)) > 0)
         {
-            
-            send(client_socket, s.username, sizeof(s.username), 0);
-            send(client_socket, s.password, sizeof(s.password), 0);
-            send(client_socket, s.name, sizeof(s.name), 0);
-            send(client_socket, &s.age, sizeof(s.age), 0);
-            send(client_socket, s.email, sizeof(s.email), 0);
-            send(client_socket, s.address, sizeof(s.address), 0);
-
-            // Send each subject in the course array
-            for (int i = 0; i < 5; i++) 
+            if (strcmp(f.username, username_to_find) == 0)
             {
-                send(client_socket, s.course[i], sizeof(s.course[i]), 0);
-            }
+                //send(client_socket, &s, sizeof(struct student), 0);
+                snprintf(buf, sizeof(buf), "\n1. username : %s\n2. password : %s\n3. name : %s\n4. dept : %s\n5. email : %s\n6. address : %s\n7. designation : %s\n8. course :\n", f.username,f.password,f.name,f.dept,f.email,f.address,f.designation);
+                send(client_socket, buf, strlen(buf), 0);
+                // Send each subject in the course array
+                for (int i = 0; i < 5; i++) 
+                {
+                    if(s.course[i]=="\0")
+                        break;
 
-            student_found = 1;
-            break; // Student found, no need to continue searching
+                    send(client_socket, s.course[i], sizeof(s.course[i]), 0);
+                    sleep(0.5);
+                }
+                faculty_found = 1;
+                break; // faculty found, no need to continue searching
+            }
         }
 
-        if (!student_found)
+        if (!faculty_found)
         {
-            // Student not found, send an error message to the client
-            memset(buf1, 0, sizeof(buf1));
-            strcpy(buf1, "Student not found\n");
-            send(client_socket, buf1, strlen(buf1), 0);
+            // faculty not found, send an error message to the client
+            memset(buf, 0, sizeof(buf));
+            strcpy(buf, "faculty not found\n");
+            send(client_socket, buf, strlen(buf), 0);
         }
     }
 

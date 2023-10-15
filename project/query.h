@@ -64,7 +64,7 @@ void query(int client_socket,struct sockaddr_in client_address)
         send(client_socket,tmp, sizeof(tmp), 0);
         return;
     }
-    int pd,bytes_received,ch;
+    int pd,ch;
     switch (choice)
     {
     case 1:
@@ -92,8 +92,8 @@ void query(int client_socket,struct sockaddr_in client_address)
             }
             
             fun(client_socket,client_address,ch);
-            break;
         }
+            break;
         
 
 
