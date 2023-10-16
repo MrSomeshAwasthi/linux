@@ -21,29 +21,208 @@
     6. Logout and Exit
 */
 
-struct courses
-{
-    char name[32];
-    char cid[6];
-    char dept[32];
-    char teacher[32];
-    int seat;
-    int credit;
-    int avail;
-    int status;
-};
+
+char buf[1024];
 
 void view_course(int client_socket)
-{
-    char username_to_find[10];
-    int fd = open("data/course.txt", O_RDONLY); 
+{ 
+    int fd = open("data/faculty.txt",O_RDONLY);
     if (fd == -1)
     {
         perror("Error opening file");
         return;
     }
     memset(buf, 0, sizeof(buf));
-    strcpy(buf, "Enter the username of the student you want to view: \n");
+    strcpy(buf, "Enter the courseID of course you want to view: \n");
+    send(client_socket, buf, strlen(buf), 0);
+
+    memset(buf, 0, sizeof(buf));
+    int bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+
+    if (bytes_received < 1)
+    {
+        // Handle error if no data received from the client
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf, "Error receiving data from client\n");
+        send(client_socket, buf, strlen(buf), 0);
+        exit(1);
+    }
+    else
+    {
+        struct faculty f;
+        lseek(fd,0,SEEK_SET);
+        // Read student records from the file one by one and look for a match
+        while (read(fd, &f, sizeof(struct faculty)) > 0)
+        {
+            if (strcmp(f.username, username) == 0)
+            {
+                memset(buf, 0, sizeof(buf));
+                strcpy(buf, "course :\n");
+                send(client_socket, buf, strlen(buf), 0);
+
+                for (int i = 0; i < 5; i++) 
+                {   
+                    if(f.course[i]=="\0")
+                        break;
+
+                    send(client_socket, f.course[i], sizeof(f.course[i]), 0);
+                    sleep(0.01);
+                }                
+                break; 
+            }
+
+        }
+    }
+
+    close(fd); 
+}
+
+
+void add_course(int client_socket)
+{
+    struct courses c;
+    int fd = open("data/course.txt",O_RDWR);
+    
+    // name
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "1. Enter course name:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,1024);
+    int bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+    if(bytes_received<1)
+    {
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
+    }
+    strcpy(c.name,buf);
+    c.name[strlen(c.name)-1]='\0';
+
+
+    // course id
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "2. Enter course id:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+    if(bytes_received<1)
+    {
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
+    }
+    strcpy(c.cid,buf);
+    c.cid[strlen(c.cid)-1]='\0';
+
+
+    // department
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "3. Enter department:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+    if(bytes_received<1)
+    {
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
+    }
+    strcpy(c.dept,buf);
+    c.dept[strlen(c.dept)-1]='\0';
+
+    // course offered by
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "4. Enter instructor name:\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+    if(bytes_received<1)
+    {
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
+    }
+    strcpy(c.teacher,buf);
+    c.teacher[strlen(c.teacher)-1]='\0';
+
+    // total no of seats for course
+
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "5. Enter total seats :\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+    if(bytes_received<1)
+    {
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
+    }
+    c.seat=atoi(buf);
+
+    // credit
+
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "6. Enter credit :\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+    if(bytes_received<1)
+    {
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
+    }
+    c.credit=atoi(buf);
+
+    // avail
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "7. Enter available seat :\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+    if(bytes_received<1)
+    {
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
+    }
+    c.avail=atoi(buf);
+
+
+    // course status
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "8. Enter course status :\n");
+    send(client_socket,buf,strlen(buf),0);
+    memset(buf,0,sizeof(buf));
+    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+    if(bytes_received<1)
+    {
+        memset(buf, 0, sizeof(buf));
+        strcpy(buf,"Error\n");
+        send(client_socket,buf,strlen(buf),0);
+    }
+    c.status=atoi(buf);
+ 
+    
+    write(fd,&f,sizeof(f));    
+
+    return;
+
+}
+
+
+void course_status(int client_socket)
+{
+    struct courses c;
+    int fd = open("data/course.txt",O_RDWR);
+    if (fd == -1)
+    {
+        perror("Error opening file");
+        return;
+    }
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "Enter the course status you want to change : \n");
     send(client_socket, buf, strlen(buf), 0);
 
     memset(buf, 0, sizeof(buf));
@@ -62,7 +241,7 @@ void view_course(int client_socket)
         // Copy the received username to the search query
         strncpy(username_to_find, buf, sizeof(username_to_find));
         username_to_find[9]='\0';
-        struct student s;
+        struct course c;
         int student_found = 0;
         lseek(fd,0,SEEK_SET);
         // Read student records from the file one by one and look for a match
@@ -71,44 +250,15 @@ void view_course(int client_socket)
             //printf("namee%sfind%s\n",s.username,username_to_find);
             if (strcmp(s.username, username_to_find) == 0)
             {
-                // printf("%d:%d:%s:%s:%s:%s:%s\n",s.age,s.status,s.username,s.password,s.name,s.email,s.address);
-                //send(client_socket, &s, sizeof(struct student), 0);
-                snprintf(buf, sizeof(buf), "\n1. username : %s\n2. password : %s\n3. name : %s\n4. age : %d\n5. email : %s\n6. address : %s\n7. status : %d\n8. course :\n", s.username,s.password,s.name,s.age,s.email,s.address,s.status);
-                send(client_socket, buf, strlen(buf), 0);
-                //send(client_socket, "\n8. course :\n", sizeof("8. course :\n"), 0);
-                for (int i = 0; i < 5; i++) 
-                {   
-                    if(s.course[i]=="\0")
-                        break;
-
-                    send(client_socket, s.course[i], sizeof(s.course[i]), 0);
-                    sleep(0.5);
-                }
-                student_found = 1;
-                break; // Student found, no need to continue searching
+                lseek(fd,-1*sizeof(struct student),SEEK_CUR);
+                c.status=0;
+                send(client_socket,"done\n",strlen("done\n"),0);
+                write(fd,&s,sizeof(s));  
+                break;
             }
-
-        }
-
-        if (!student_found)
-        {
-            // Student not found, send an error message to the client
-            memset(buf, 0, sizeof(buf));
-            strcpy(buf, "Student not found\n");
-            send(client_socket, buf, strlen(buf), 0);
         }
     }
-
-    close(fd); // Close the file
 }
-
-
-void add_course(int client_socket)
-{}
-
-
-void remove_course(int client_socket)
-{}
 
 
 void update_course(int client_socket)
@@ -124,9 +274,7 @@ void funp(int client_socket,struct sockaddr_in client_address,int choice)
     switch (choice)
     {
         case 1:
-            //struct globalauth g;
-            printf("uname: %s    and  pw :  %s\n",username,password);
-            //view_course(client_socket);
+            view_course(client_socket);
             break;
 
         case 2:
@@ -134,7 +282,7 @@ void funp(int client_socket,struct sockaddr_in client_address,int choice)
             break;
 
         case 3:
-            remove_course(client_socket);
+            course_status(client_socket);
             break;
 
         case 4:

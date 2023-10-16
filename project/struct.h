@@ -9,6 +9,7 @@ struct student
     char course[5][6]; 
     int status;
 };
+
 struct faculty
 {
     char username[10];  
@@ -22,15 +23,14 @@ struct faculty
     
 };
 
-// #ifndef auth
-// #define auth
-
-// // Define the struct
-// struct globalauth {
-//     char username[10];  
-//     char password[10];  
-// };
-
-// // extern struct globalauth g;
-
-// #endif // 
+struct courses
+{
+    char name[32];
+    char cid[6];
+    char dept[32];
+    char teacher[32];
+    int seat;
+    int credit;
+    int avail;
+    int status;
+};

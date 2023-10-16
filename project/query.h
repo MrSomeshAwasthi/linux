@@ -12,16 +12,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-
-
 #include "struct.h"
 #include "authen.h"
 #include "admin_fun.h"
 #include "prof_fun.h"
 #include "stud_fun.h"
-
-
-
 
 void query(int client_socket,struct sockaddr_in client_address) 
 {   
@@ -156,7 +151,7 @@ void query(int client_socket,struct sockaddr_in client_address)
                 exit(1);
             }
             
-            fun(client_socket,client_address,ch);
+            //funs(client_socket,client_address,ch);
         }
         break;
 
