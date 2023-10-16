@@ -14,6 +14,7 @@
 
 
 
+#include "struct.h"
 #include "authen.h"
 #include "admin_fun.h"
 #include "prof_fun.h"
@@ -123,7 +124,7 @@ void query(int client_socket,struct sockaddr_in client_address)
                 exit(1);
             }
             
-            fun(client_socket,client_address,ch);
+            funp(client_socket,client_address,ch);
         }
         break;
 

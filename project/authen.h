@@ -3,6 +3,7 @@
     FILE DESCRIPTION : 
 */
 
+
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -14,33 +15,12 @@
 #include <netinet/in.h>
 
 
-struct sample1
-{
-    char username[10];  
-    char password[10];  
-    char name[32];
-    int age;  
-    char email[129];  
-    char address[129];  
-    char course[5][6]; 
-    int status;
-};
-struct sample2
-{
-    char username[10];  
-    char password[10];  
-    char name[32];
-    char dept[32];  
-    char designation[20];
-    char email[129];  
-    char address[129];  
-    char course[5][6]; 
-};
 
-char username[128],password[128],tmp[1024];
+char username[10],password[10],tmp[1024];
 
 bool admin(int client_socket)
 {
+    char username[6],password[6],tmp[1024];
     memset(tmp, 0, sizeof(tmp));
     strcpy(tmp, "\nEnter the username: \n");
     send(client_socket, tmp, strlen(tmp), 0);
@@ -84,7 +64,7 @@ bool admin(int client_socket)
 
 bool facultys(int client_socket)
 {
-    char username[10],password[10];
+    //char username[10],password[10];
     int fd = open("data/faculty.txt", O_RDONLY);
 
 
@@ -123,12 +103,12 @@ bool facultys(int client_socket)
     }
     password[password_bytes-1] = '\0';
 
-    struct sample1 f;
+    struct student f;
+    //struct globalauth g;
      lseek(fd,0,SEEK_SET);
     // Read student records from the file one by one and look for a match
-    while (read(fd, &f, sizeof(struct sample1)) > 0)
+    while (read(fd, &f, sizeof(struct student)) > 0)
     {
-        //if ((strcmp(username, f.username) || strcpy(password, f.password) ) != 0)
         if (strcmp(username, f.username) != 0 && strcmp(password, f.password) != 0)
         {
             printf("%s%s\n",f.username,username);
@@ -137,6 +117,14 @@ bool facultys(int client_socket)
             strcpy(tmp, "Invalid username and password\n");
             memset(username, 0, sizeof(username));
             send(client_socket, tmp, strlen(tmp), 0);
+
+            //storing username and password for future refrence
+            // memset(g.username,0,sizeof(g.username));
+            // memset(g.password,0,sizeof(g.password));
+            // strcpy(g.username,username);
+            // strcpy(g.password,password);
+            
+
             return false;
         } 
         return true;
@@ -187,12 +175,11 @@ bool students(int client_socket)
     }
     password[password_bytes-1] = '\0';
 
-    struct sample2 s;
+    struct faculty s;
      lseek(fd,0,SEEK_SET);
     // Read student records from the file one by one and look for a match
-    while (read(fd, &s, sizeof(struct sample2)) > 0)
+    while (read(fd, &s, sizeof(struct faculty)) > 0)
     {
-        //if ((strcmp(s.username, username) || strcpy(s.password, password) ) != 0)
         if (strcmp(s.username, username) != 0 && strcmp(s.password, password) != 0)
         {
             printf("%s%s\n",s.username,username);
@@ -215,12 +202,6 @@ bool authen(int client_socket,struct sockaddr_in client_address,int choice)
     bool ans=false;
     memset(username, 0, sizeof(username));
     memset(password, 0, sizeof(password));
-    
-    // int bytes_received = recv(client_socket, temp, sizeof(temp), 0);
-    // if (bytes_received <= 0) {
-    //     perror("Error reading choice from client");
-    //     return false;
-    // }
     
     switch (choice)
     {
