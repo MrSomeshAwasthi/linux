@@ -50,19 +50,20 @@ void view_course(int client_socket)
                     break;
 
                 send(client_socket, f.course[i], sizeof(f.course[i]), 0);
+                send(client_socket,"\n",sizeof("\n"),0); 
                 sleep(0.01);
-            }                
+            }               
             break; 
         }
     }
-
     close(fd); 
+    return;
 }
 
 
 void add_course(int client_socket)
 {
-    int fd1 = open("data/faculty.txt",O_RDONLY);
+    int fd1 = open("data/faculty.txt",O_RDWR);
     if (fd1 == -1)
     {
         perror("Error opening file");
@@ -70,16 +71,16 @@ void add_course(int client_socket)
     }
 
     struct faculty f;
-    lseek(fd,0,SEEK_SET);
+    lseek(fd1,0,SEEK_SET);
     // Read student records from the file one by one and look for a match
-    while (read(fd, &f, sizeof(struct faculty)) > 0)
+    while (read(fd1, &f, sizeof(struct faculty)) > 0)
     {
         if (strcmp(f.username, username) == 0)
         {
-            int count=0
+            int count=0;
             for (int i = 0; i < 5; i++) 
             {   
-                if(!strcmp(&course[i], "\0"))
+                if(!strcmp(f.course[i], "\0"))
                     {
                         break;
                     }
@@ -96,7 +97,7 @@ void add_course(int client_socket)
             }
 
             
-
+            printf("op : %ld\n",lseek(fd1,-1*sizeof(struct faculty),SEEK_CUR));
             struct courses c;
             int fd = open("data/course.txt",O_RDWR);
             
@@ -221,16 +222,19 @@ void add_course(int client_socket)
             }
             c.status=atoi(buf);
         
-            f.course[count].strcpy(f.course[count],c.cid);
-            write(fd,&c,sizeof(c));    
+            //f.course[count].strcpy(f.course[count],c.cid);
+            strcpy(f.course[count], c.cid);
+            write(fd,&c,sizeof(c));
             write(fd1,&f,sizeof(f));
+            // printf("coursev: %ld\n",write(fd,&c,sizeof(c)));   
+            // printf("fac: %ld\n",write(fd1,&f,sizeof(f)));    
+            // perror("gfbh");
+            //write(fd1,&f,sizeof(f));
             return;
 
 
         }
     }
-    
-
 }
 
 
@@ -462,7 +466,7 @@ void update_course(int client_socket)
 
 void change_pw(int client_socket)
 {
-    int fd = open("data/faculty.txt",O_RDONLY);
+    int fd = open("data/faculty.txt",O_RDWR);
     if (fd == -1)
     {
         perror("Error opening file");
@@ -478,7 +482,7 @@ void change_pw(int client_socket)
         {
             lseek(fd,-1*sizeof(struct faculty),SEEK_CUR);
             memset(buf, 0, sizeof(buf));
-            strcpy(buf, "2. Enter password:\n");
+            strcpy(buf, "Enter new password:\n");
             send(client_socket, buf, strlen(buf), 0);
             memset(buf,0,sizeof(buf));
             int bytes_received = recv(client_socket, buf, sizeof(buf), 0);
@@ -529,10 +533,3 @@ void funp(int client_socket,struct sockaddr_in client_address,int choice)
             break;
     }
 }
-
-
-
-/*
-    
-*/
-
