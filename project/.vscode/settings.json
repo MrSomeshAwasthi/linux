@@ -2,7 +2,8 @@
     "files.associations": {
         "in.h": "c",
         "socket.h": "c",
-        "algorithm": "c"
+        "algorithm": "c",
+        "inet.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

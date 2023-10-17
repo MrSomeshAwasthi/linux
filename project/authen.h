@@ -158,14 +158,14 @@ bool students(int client_socket)
         send(client_socket,tmp,sizeof(tmp),0);
         return false;
     }
-    password[password_bytes-1] = '\0';
-
-    struct faculty s;
-     lseek(fd,0,SEEK_SET);
+    password[password_bytes-1] = '\0'; 
+    
+    struct student s;
+    lseek(fd,0,SEEK_SET);
     // Read student records from the file one by one and look for a match
-    while (read(fd, &s, sizeof(struct faculty)) > 0)
+    while (read(fd, &s, sizeof(struct student)) > 0)
     {
-        if (strcmp(s.username, username) != 0 && strcmp(s.password, password) != 0)
+        if (strcmp(s.username, username) != 0 && strcmp(s.password, password) != 0 )
         {
             memset(tmp, 0, sizeof(tmp));
             strcpy(tmp, "Invalid username and password\n");
@@ -173,11 +173,12 @@ bool students(int client_socket)
             send(client_socket, tmp, strlen(tmp), 0);
             return false;
         } 
-        return true;
+        if (s.status)
+            return true;
+        return false;
     }
 
 }
-
 
 bool authen(int client_socket,struct sockaddr_in client_address,int choice)
 {

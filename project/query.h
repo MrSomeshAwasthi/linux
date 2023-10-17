@@ -151,7 +151,7 @@ void query(int client_socket,struct sockaddr_in client_address)
                 exit(1);
             }
             
-            //funs(client_socket,client_address,ch);
+            funs(client_socket,client_address,ch);
         }
         break;
 
