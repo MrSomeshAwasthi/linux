@@ -736,6 +736,8 @@ void modify_fac(int client_socket)
                 }
                 strcpy(f.address,buf);
                 f.address[strlen(f.address)-1]='\0';
+
+                
                 write(fd,&f,sizeof(f));  
                 break;
             }
