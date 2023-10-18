@@ -13,6 +13,7 @@
 #include <netinet/in.h>
 
 #include "struct.h"
+#include "lock.h"
 #include "authen.h"
 #include "admin_fun.h"
 #include "prof_fun.h"

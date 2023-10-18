@@ -59,7 +59,6 @@ bool admin(int client_socket)
     return true;
 }
 
-
 bool facultys(int client_socket)
 {
     int fd = open("data/faculty.txt", O_RDONLY);
@@ -105,19 +104,13 @@ bool facultys(int client_socket)
     // Read student records from the file one by one and look for a match
     while (read(fd, &f, sizeof(struct student)) > 0)
     {
-        if (strcmp(username, f.username) != 0 && strcmp(password, f.password) != 0)
+        if (strcmp(username, f.username) == 0 && strcmp(password, f.password) == 0)
         {
-            memset(tmp, 0, sizeof(tmp));
-            strcpy(tmp, "Invalid username and password\n");
-            memset(username, 0, sizeof(username));
-            send(client_socket, tmp, strlen(tmp), 0);
-            return false;
+            return true;
         } 
-        return true;
     }
-
+    return false;
 }
-
 
 bool students(int client_socket)
 {
@@ -165,18 +158,13 @@ bool students(int client_socket)
     // Read student records from the file one by one and look for a match
     while (read(fd, &s, sizeof(struct student)) > 0)
     {
-        if (strcmp(s.username, username) != 0 && strcmp(s.password, password) != 0 )
+        if (strcmp(username, s.username) == 0 && strcmp(password, s.password) == 0 )
         {
-            memset(tmp, 0, sizeof(tmp));
-            strcpy(tmp, "Invalid username and password\n");
-            memset(username, 0, sizeof(username));
-            send(client_socket, tmp, strlen(tmp), 0);
-            return false;
+            if (s.status)
+                return true;
         } 
-        if (s.status)
-            return true;
-        return false;
     }
+    return false;
 
 }
 

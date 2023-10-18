@@ -122,8 +122,12 @@ void enroll_course(int client_socket)
                 }
             }
             lseek(fd,-1*sizeof(struct courses),SEEK_CUR);
+            write_lock(fd,-1,sizeof(c));
             write(fd,&c,sizeof(c));
+            unlock_file(fd,-1,sizeof(c));
+            write_lock(fd1,-1,sizeof(s));
             write(fd1,&s,sizeof(s));
+            unlock_file(fd1,-1,sizeof(s));
             return;
         }
     }       
@@ -192,8 +196,12 @@ void drop_course(int client_socket)
                 }
             }
             lseek(fd,-1*sizeof(struct courses),SEEK_CUR);
+            write_lock(fd,-1,sizeof(c));
             write(fd,&c,sizeof(c));
+            unlock_file(fd,-1,sizeof(c));
+            write_lock(fd1,-1,sizeof(s));
             write(fd1,&s,sizeof(s));
+            unlock_file(fd1,-1,sizeof(s));
             return;
         }
     }       
@@ -268,7 +276,9 @@ void change_spw(int client_socket)
             strcpy(s.password,buf);
             s.password[strlen(s.password)-1]='\0';
 
-            write(fd,&s,sizeof(s));            
+            write_lock(fd,-1,sizeof(s));
+            write(fd,&s,sizeof(s));     
+            unlock_file(fd,-1,sizeof(s));       
             break; 
         }
         
@@ -306,145 +316,3 @@ void funs(int client_socket,struct sockaddr_in client_address,int choice)
             break;
     }
 }
-
-
-/*
-//         printf("op : %ld\n",lseek(fd1,-1*sizeof(struct faculty),SEEK_CUR));
-    //         struct courses c;
-    //         int fd = open("data/course.txt",O_RDWR);
-            
-    //         // name
-    //         memset(buf, 0, sizeof(buf));
-    //         strcpy(buf, "1. Enter course name:\n");
-    //         send(client_socket,buf,strlen(buf),0);
-    //         memset(buf,0,1024);
-    //         int bytes_received = recv(client_socket, buf, sizeof(buf), 0);
-    //         if(bytes_received<1)
-    //         {
-    //             memset(buf, 0, sizeof(buf));
-    //             strcpy(buf,"Error\n");
-    //             send(client_socket,buf,strlen(buf),0);
-    //         }
-    //         strcpy(c.name,buf);
-    //         c.name[strlen(c.name)-1]='\0';
-
-
-    //         // course id
-    //         memset(buf, 0, sizeof(buf));
-    //         strcpy(buf, "2. Enter course id:\n");
-    //         send(client_socket,buf,strlen(buf),0);
-    //         memset(buf,0,sizeof(buf));
-    //         bytes_received = recv(client_socket, buf, sizeof(buf), 0);
-    //         if(bytes_received<1)
-    //         {
-    //             memset(buf, 0, sizeof(buf));
-    //             strcpy(buf,"Error\n");
-    //             send(client_socket,buf,strlen(buf),0);
-    //         }
-    //         strcpy(c.cid,buf);
-    //         c.cid[strlen(c.cid)-1]='\0';
-
-
-    //         // department
-    //         memset(buf, 0, sizeof(buf));
-    //         strcpy(buf, "3. Enter department:\n");
-    //         send(client_socket,buf,strlen(buf),0);
-    //         memset(buf,0,sizeof(buf));
-    //         bytes_received = recv(client_socket, buf, sizeof(buf), 0);
-    //         if(bytes_received<1)
-    //         {
-    //             memset(buf, 0, sizeof(buf));
-    //             strcpy(buf,"Error\n");
-    //             send(client_socket,buf,strlen(buf),0);
-    //         }
-    //         strcpy(c.dept,buf);
-    //         c.dept[strlen(c.dept)-1]='\0';
-
-    //         // course offered by
-    //         memset(buf, 0, sizeof(buf));
-    //         strcpy(buf, "4. Enter instructor name:\n");
-    //         send(client_socket,buf,strlen(buf),0);
-    //         memset(buf,0,sizeof(buf));
-    //         bytes_received = recv(client_socket, buf, sizeof(buf), 0);
-    //         if(bytes_received<1)
-    //         {
-    //             memset(buf, 0, sizeof(buf));
-    //             strcpy(buf,"Error\n");
-    //             send(client_socket,buf,strlen(buf),0);
-    //         }
-    //         strcpy(c.teacher,buf);
-    //         c.teacher[strlen(c.teacher)-1]='\0';
-
-    //         // total no of seats for course
-
-    //         memset(buf, 0, sizeof(buf));
-    //         strcpy(buf, "5. Enter total seats :\n");
-    //         send(client_socket,buf,strlen(buf),0);
-    //         memset(buf,0,sizeof(buf));
-    //         bytes_received = recv(client_socket, buf, sizeof(buf), 0);
-    //         if(bytes_received<1)
-    //         {
-    //             memset(buf, 0, sizeof(buf));
-    //             strcpy(buf,"Error\n");
-    //             send(client_socket,buf,strlen(buf),0);
-    //         }
-    //         c.seat=atoi(buf);
-
-    //         // credit
-
-    //         memset(buf, 0, sizeof(buf));
-    //         strcpy(buf, "6. Enter credit :\n");
-    //         send(client_socket,buf,strlen(buf),0);
-    //         memset(buf,0,sizeof(buf));
-    //         bytes_received = recv(client_socket, buf, sizeof(buf), 0);
-    //         if(bytes_received<1)
-    //         {
-    //             memset(buf, 0, sizeof(buf));
-    //             strcpy(buf,"Error\n");
-    //             send(client_socket,buf,strlen(buf),0);
-    //         }
-    //         c.credit=atoi(buf);
-
-    //         // avail
-    //         memset(buf, 0, sizeof(buf));
-    //         strcpy(buf, "7. Enter available seat :\n");
-    //         send(client_socket,buf,strlen(buf),0);
-    //         memset(buf,0,sizeof(buf));
-    //         bytes_received = recv(client_socket, buf, sizeof(buf), 0);
-    //         if(bytes_received<1)
-    //         {
-    //             memset(buf, 0, sizeof(buf));
-    //             strcpy(buf,"Error\n");
-    //             send(client_socket,buf,strlen(buf),0);
-    //         }
-    //         c.avail=atoi(buf);
-
-
-    //         // course status
-    //         memset(buf, 0, sizeof(buf));
-    //         strcpy(buf, "8. Enter course status :\n");
-    //         send(client_socket,buf,strlen(buf),0);
-    //         memset(buf,0,sizeof(buf));
-    //         bytes_received = recv(client_socket, buf, sizeof(buf), 0);
-    //         if(bytes_received<1)
-    //         {
-    //             memset(buf, 0, sizeof(buf));
-    //             strcpy(buf,"Error\n");
-    //             send(client_socket,buf,strlen(buf),0);
-    //         }
-    //         c.status=atoi(buf);
-        
-    //         //f.course[count].strcpy(f.course[count],c.cid);
-    //         strcpy(f.course[count], c.cid);
-    //         write(fd,&c,sizeof(c));
-    //         write(fd1,&f,sizeof(f));
-    //         // printf("coursev: %ld\n",write(fd,&c,sizeof(c)));   
-    //         // printf("fac: %ld\n",write(fd1,&f,sizeof(f)));    
-    //         // perror("gfbh");
-    //         //write(fd1,&f,sizeof(f));
-    //         return;
-
-
-    //     }
-    // }
-*/
