@@ -132,58 +132,71 @@ void enroll_course(int client_socket)
 
 void drop_course(int client_socket)
 {
-    // struct courses c;
-    // int fd = open("data/course.txt",O_RDWR);
-    // if (fd == -1)
-    // {
-    //     perror("Error opening file");
-    //     return;
-    // }
+    int fd1 = open("data/student.txt",O_RDWR);
+    if (fd1 == -1)
+    {
+        perror("Error opening file");
+        return;
+    }
 
-    // memset(buf, 0, sizeof(buf));
-    // strcpy(buf, "Enter the course status you want to change : \n");
-    // send(client_socket, buf, strlen(buf), 0);
+    memset(buf, 0, sizeof(buf));
+    strcpy(buf, "Enter the Course ID you want to drop: \n");
+    send(client_socket, buf, strlen(buf), 0);
 
-    // memset(buf, 0, sizeof(buf));
-    // int bytes_received = recv(client_socket, buf, sizeof(buf), 0);
-    // char cid[6];
-    // strcpy(cid,buf);
-    // cid[bytes_received-1]='\0';
-
-    // if (bytes_received < 1)
-    // {
-    //     // Handle error if no data received from the client
-    //     memset(buf, 0, sizeof(buf));
-    //     strcpy(buf, "Error receiving data from client\n");
-    //     send(client_socket, buf, strlen(buf), 0);
-    //     exit(1);
-    // }
-    // else
-    // {
-    //     // Copy the received username to the search query
-    //     lseek(fd,0,SEEK_SET);
-    //     // Read student records from the file one by one and look for a match
-    //     while (read(fd, &c, sizeof(struct courses)) > 0)
-    //     {
-    //         if (strcmp(c.cid, cid) == 0)
-    //         {
-    //             lseek(fd,-1*sizeof(struct courses),SEEK_CUR);
-    //             strcpy(buf, "Enter the status of course {1. Activate (1) 2. Deactivate (0)}:\n");
-    //             send(client_socket,buf,strlen(buf),0);
-    //             memset(buf,0,sizeof(buf));
-    //             bytes_received = recv(client_socket, buf, sizeof(buf), 0);
-    //             if(bytes_received<1)
-    //             {
-    //                 memset(buf, 0, sizeof(buf));
-    //                 strcpy(buf,"Error\n");
-    //                 send(client_socket,buf,strlen(buf),0);
-    //             }
-    //             c.status=atoi(buf);
-    //             write(fd,&c,sizeof(c));  
-    //             break;
-    //         }
-    //     }
-    // }
+    memset(buf, 0, sizeof(buf));
+    int bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+    char check[6];
+    strcpy(check,buf);
+    check[bytes_received-1]='\0';
+    struct student s;
+    lseek(fd1,0,SEEK_SET);
+    // Read student records from the file one by one and look for a match
+    while (read(fd1, &s, sizeof(struct student)) > 0)
+    {
+        if (strcmp(s.username, username) == 0)
+        {
+            int count=0;
+            for (int i = 0; i < 5; i++) 
+            {   
+                if(!strcmp(s.course[i], "\0"))
+                {
+                    break;
+                }
+                if(!strcmp(s.course[i], check))
+                {
+                    lseek(fd1,-1*sizeof(struct student),SEEK_CUR);
+                    strcpy(s.course[count],"\0");
+                    memset(buf, 0, sizeof(buf));
+                    strcpy(buf, "course: \n");
+                    send(client_socket, buf, strlen(buf), 0);
+                    break;
+                }
+                count++;
+            }    
+            if  (count==5)
+            {
+                memset(buf, 0, sizeof(buf));
+                strcpy(buf, "sorry you have offered more than 5 course\n");
+                send(client_socket, buf, strlen(buf), 0);
+                break;
+            }
+            
+            struct courses c;
+            int fd = open("data/course.txt",O_RDWR);
+            while (read(fd, &c, sizeof(struct courses)) > 0)
+            {
+                if (strcmp(c.cid, check) == 0)
+                {
+                    c.avail++;
+                    break;
+                }
+            }
+            lseek(fd,-1*sizeof(struct courses),SEEK_CUR);
+            write(fd,&c,sizeof(c));
+            write(fd1,&s,sizeof(s));
+            return;
+        }
+    }       
 }
 
 
