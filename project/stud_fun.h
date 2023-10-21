@@ -109,16 +109,26 @@ void enroll_course(int client_socket)
             {
                 if (strcmp(c.cid, check) == 0)
                 {
-                    if(!c.avail==0 || !c.status)
+                    if(c.avail==0)
                     {
                         memset(buf, 0, sizeof(buf));
-                        strcpy(buf, "course maybe inactive or seat is filled\n");
+                        strcpy(buf, "course seat is filled\n");
                         send(client_socket, buf, strlen(buf), 0);
                         break;
                     }
-                    c.avail--;
-                    strcpy(s.course[count],c.cid);
-                    break;
+                    if(c.status)
+                    {
+                        c.avail--;
+                        strcpy(s.course[count],c.cid);
+                        break;
+                    }
+                    else
+                    {
+                        memset(buf, 0, sizeof(buf));
+                        strcpy(buf, "course maybe inactive\n");
+                        send(client_socket, buf, strlen(buf), 0);
+                        break;
+                    }
                 }
             }
             lseek(fd,-1*sizeof(struct courses),SEEK_CUR);
