@@ -99,10 +99,10 @@ bool facultys(int client_socket)
     }
     password[password_bytes-1] = '\0';
 
-    struct student f;
+    struct faculty f;
      lseek(fd,0,SEEK_SET);
     // Read student records from the file one by one and look for a match
-    while (read(fd, &f, sizeof(struct student)) > 0)
+    while (read(fd, &f, sizeof(struct faculty)) > 0)
     {
         if (strcmp(username, f.username) == 0 && strcmp(password, f.password) == 0)
         {

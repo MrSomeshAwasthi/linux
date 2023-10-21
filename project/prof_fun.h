@@ -44,13 +44,21 @@ void view_course(int client_socket)
             strcpy(buf, "course :\n");
             send(client_socket, buf, strlen(buf), 0);
 
+            struct courses c;
+            int fd = open("data/course.txt",O_RDONLY);
+
+
             for (int i = 0; i < 5; i++) 
             {   
                 if(f.course[i]=="\0")
                     break;
 
-                send(client_socket, f.course[i], sizeof(f.course[i]), 0);
+                if(c.status==0)
+                    continue;
+
                 send(client_socket,"\n",sizeof("\n"),0); 
+                sleep(0.01);
+                send(client_socket, f.course[i], sizeof(f.course[i]), 0);
                 sleep(0.01);
             }               
             break; 
@@ -63,6 +71,7 @@ void view_course(int client_socket)
 
 void add_course(int client_socket)
 {
+    struct faculty f;
     int fd1 = open("data/faculty.txt",O_RDWR);
     if (fd1 == -1)
     {
@@ -70,7 +79,6 @@ void add_course(int client_socket)
         return;
     }
 
-    struct faculty f;
     lseek(fd1,0,SEEK_SET);
     // Read student records from the file one by one and look for a match
     while (read(fd1, &f, sizeof(struct faculty)) > 0)
@@ -85,8 +93,6 @@ void add_course(int client_socket)
                         break;
                     }
                 count++;
-                send(client_socket, f.course[i], sizeof(f.course[i]), 0);
-                sleep(0.01);
             }    
             if  (count==5)
             {
@@ -96,10 +102,10 @@ void add_course(int client_socket)
                 break;
             }
 
-            
-            printf("op : %ld\n",lseek(fd1,-1*sizeof(struct faculty),SEEK_CUR));
+            lseek(fd1,-1*sizeof(struct faculty),SEEK_CUR);
+            //printf("op : %ld\n",);
             struct courses c;
-            int fd = open("data/course.txt",O_RDWR);
+            int fd = open("data/course.txt",O_RDWR|O_APPEND);
             
             // name
             memset(buf, 0, sizeof(buf));
@@ -241,12 +247,15 @@ void add_course(int client_socket)
 void course_status(int client_socket)
 {
     struct courses c;
+    int pass=0;
     int fd = open("data/course.txt",O_RDWR);
     if (fd == -1)
     {
         perror("Error opening file");
         return;
     }
+    struct faculty f;
+    int fd1 = open("data/faculty.txt",O_RDONLY);
 
     memset(buf, 0, sizeof(buf));
     strcpy(buf, "Enter the course status you want to change : \n");
@@ -257,6 +266,21 @@ void course_status(int client_socket)
     char cid[6];
     strcpy(cid,buf);
     cid[bytes_received-1]='\0';
+
+    while (read(fd1, &f, sizeof(struct faculty)) > 0)
+    {
+        if (strcmp(f.username, username) == 0)
+        {
+            for (int k=0;k<5;k++)
+            {
+                if(strcmp(cid,f.course[k])==0)
+                {
+                    pass=1;
+                    break;
+                }
+            }
+        }
+    }
 
     if (bytes_received < 1)
     {
@@ -275,20 +299,30 @@ void course_status(int client_socket)
         {
             if (strcmp(c.cid, cid) == 0)
             {
-                lseek(fd,-1*sizeof(struct courses),SEEK_CUR);
-                strcpy(buf, "Enter the status of course {1. Activate (1) 2. Deactivate (0)}:\n");
-                send(client_socket,buf,strlen(buf),0);
-                memset(buf,0,sizeof(buf));
-                bytes_received = recv(client_socket, buf, sizeof(buf), 0);
-                if(bytes_received<1)
+                if(pass)
+                {
+                    lseek(fd,-1*sizeof(struct courses),SEEK_CUR);
+                    strcpy(buf, "Enter the status of course {1. Activate (1) 2. Deactivate (0)}:\n");
+                    send(client_socket,buf,strlen(buf),0);
+                    memset(buf,0,sizeof(buf));
+                    bytes_received = recv(client_socket, buf, sizeof(buf), 0);
+                    if(bytes_received<1)
+                    {
+                        memset(buf, 0, sizeof(buf));
+                        strcpy(buf,"Error\n");
+                        send(client_socket,buf,strlen(buf),0);
+                    }
+                    c.status=atoi(buf);
+                    write(fd,&c,sizeof(c));  
+                    break;
+                }
+                else
                 {
                     memset(buf, 0, sizeof(buf));
-                    strcpy(buf,"Error\n");
+                    strcpy(buf,"not your subject\n");
                     send(client_socket,buf,strlen(buf),0);
+                    break;
                 }
-                c.status=atoi(buf);
-                write(fd,&c,sizeof(c));  
-                break;
             }
         }
     }

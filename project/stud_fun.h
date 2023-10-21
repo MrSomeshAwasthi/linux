@@ -109,7 +109,7 @@ void enroll_course(int client_socket)
             {
                 if (strcmp(c.cid, check) == 0)
                 {
-                    if(c.avail==0 && c.status)
+                    if(!c.avail==0 || !c.status)
                     {
                         memset(buf, 0, sizeof(buf));
                         strcpy(buf, "course maybe inactive or seat is filled\n");
